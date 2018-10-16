@@ -1,0 +1,86 @@
+<?php
+
+  $authSession = (object) FwBD\Session\Session::get('Auth');
+  $baseURI  = '/admin/level';
+  $view     = $this->getData();
+  $data     = $view['data'];
+  // $dataForm = ($view['dataForm'])?? '';
+  // pp($data->getResult());
+
+?>
+
+<h3 class="sub-header"> List data 
+  <a href="<?=$baseURI;?>/create">
+  <div class="btn btn-primary pull-right">
+    <span class="fa fa-plus-circle" aria-hidden="true"></span> Create new </div> 
+  </a>
+</h3>
+
+  <?php
+    showMessageFlash('primary');
+    showMessageFlash('success');
+    showMessageFlash('info');
+    showMessageFlash('danger');
+    showMessageFlash('warning');
+    // pp($data->getResult());
+  ?>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Category</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Author</th>
+        <th>Status</th>
+        <th style="width: 12%">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+        
+        if ( ! $data->getResult() ) {
+          echo "<tr>";
+            echo "<td colspan='8'><center><span>Sem Registro</span></center></td>";
+          echo "</tr>";
+        }
+
+        foreach ($data->getResult() as $k => $level) :
+          $action     = ($level->level_status)? 'value="1" checked' : 'value="0" ';
+          $level_id   = ($level->level_id)?? $level->id;
+          $level_name = ($level->level_name)?? $level->name;
+          echo "<tr>";
+            echo "<td>{$level->level_id}</td>";
+            echo "<td>{$level->level_category}</td>";
+            echo "<td>{$level->level_name}</td>";
+            echo '<td>';
+              echo '<small>create '.date('d-m-Y',strtotime($level->level_created));
+              echo '<br> update '.date('d-m-Y', strtotime($level->level_updated)).'</small>';
+            echo '</td>';
+            echo "<td>{$level->user_name}</td>";
+            
+            echo "<td>";
+              echo '<label class="switch">';
+                  echo '<input type="checkbox" class="sts" '.$action.'
+                  data-model="level/jstatus" data-id="'.$level_id.'" data-name="'.$level_name.'">';
+                  echo '<span class="slider round"></span>';
+              echo '</label>';
+            echo "</td>";
+            
+            echo '<td>';
+              // echo '<a href="'.$baseURI.'/preview/'.$level->level_id.'" class="btn btn-info btn-xs" title="Detalhes do usuário" alt="Detalhes do usuário"> <i class="fas fa-user m-right-xs"></i> View </a> ';
+              echo '<a href="'.$baseURI.'/edit/'.$level->level_id.'" class="btn btn-warning btn-xs" title="Edit Registro" alt="Edit Registro"> <i class="fa fa-edit m-right-xs"></i> Edit </a> ';
+              echo '<a href="'.$baseURI.'/delete/'.$level->level_id.'" class="btn btn-danger btn-xs" title="Delete Registro" alt="Delete Registro"> <i class="fas fa-trash-alt m-right-xs"></i> Delete </a> ';
+            echo '</td>';
+
+            /*echo '<td><a href=""> <i class="fas fa-image"></i> </a></td>';
+            echo '<td><a href=""> <i class="fas fa-edit"></i> </a></td>';
+            echo '<td><a href=""> <i class="fas fa-trash-alt"></i> </a></td>';*/
+          echo "</tr>";
+        endforeach;
+      ?>
+    </tbody>
+  </table>
+</div>

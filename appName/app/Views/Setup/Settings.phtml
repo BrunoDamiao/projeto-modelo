@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title> <?=APP_HEADER?> - <?=$this->getTitle();?> </title>
+    <link rel="icon" type="image/png" href="<?=PATH_FAVICON?>" />
+
+	<!-- Style Bootstrap -->
+    <link rel="stylesheet" href="/assets/libs/Bootstrap/css/Bootstrap.min.css">
+</head>
+<body>
+
+	<main role="main">
+
+		<!-- Principal jumbotron, para a principal mensagem de marketing ou call to action -->
+		<div class="jumbotron text-center">
+			<div class="container">
+				<img class="mb-4" src="/<?=PATH_LOGO2?>" alt="" >
+				<h1 class="display-4">Settings DB!</h1>
+				<p>Defina a melhor configuração para seu banco de dados!</p>
+
+				<button class="btn btn-primary mt-4" type="button" id="bntDb1"> SQLite 3 </button>
+				<button class="btn btn-primary mt-4" type="button" id="bntDb2"> MariaBD </button>
+			</div>
+		</div>
+
+			<?php
+
+				$view = $this->getData();
+				// pp($view,1);
+				$data = (object) ($view['data'])?? '';
+				// pp($data);
+
+				$msgHost	  = ($data->setup_host) ?? '';
+				$msgDBName 	  = ($data->setup_dbname) ?? '';
+				$msgUSName 	  = ($data->setup_usname) ?? '';
+  				$msgPassword  = ($data->setup_password) ?? '';
+  				$msgCharset	  = ($data->setup_charset) ?? '';
+  				$msgCollation = ($data->setup_collation) ?? '';
+
+  				/*$msgHost	= getDataInput('setup_host') ?? 'localhost';
+					$msgDBName 	= getDataInput('setup_dbname') ?? 'appModelo';
+					$msgUSName 	= getDataInput('setup_usname') ?? 'root';
+	  				$msgSenha 	= getDataInput('setup_password') ?? 'beca';
+	  				$msgCharset	= getDataInput('setup_charset') ?? 'utf8';
+	  				$msgCollation= getDataInput('setup_collation') ?? 'utf8_unicode_ci';*/
+	  				// $msgPrefix	= getDataInput('setup_prefix') ?? 'tb_';
+
+					// pp($CONFIG_DB);
+					// $path = DIRECTORY_SQLITE.'configBD.json';
+					// $dt = FwBD\Json\Json::create($CONFIG_DB, $path);
+					// pp($dt);
+			?>
+
+		<div class="container" style="min-height: 28rem;">
+			<!-- Exemplo de linha de colunas -->
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+
+					<div class="d-none" id="collapseBD1">
+						<div class="card card-body">
+							<h2>SQLITE-3</h2>
+							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+						</div>
+					</div>
+
+					<div class="d-nonex" id="collapseBD2">
+						<div class="card card-body">
+							<h2>MariaBD</h2>
+
+							<?php
+							showMessageFlash('primary');
+							showMessageFlash('success');
+							showMessageFlash('info');
+							showMessageFlash('danger');
+							showMessageFlash('warning');
+							?>
+
+							<form action="/setup/create" method="post" class="form-signin">
+
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label mt-2">Database Host</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_host" class="form-control" value="<?=$msgHost?>">
+									</div>
+									<label class="col-sm-3 col-form-label mt-2">Database Name</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_dbname" class="form-control" value="<?=$msgDBName;?>">
+									</div>
+									<label class="col-sm-3 col-form-label mt-2">Username</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_usname" class="form-control" value="<?=$msgUSName;?>">
+									</div>
+									<label class="col-sm-3 col-form-label mt-2">Password</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_password" class="form-control" value="<?=$msgPassword;?>">
+									</div>
+									<label class="col-sm-3 col-form-label mt-2">Charset</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_charset" class="form-control" value="<?=$msgCharset;?>">
+									</div>
+									<label class="col-sm-3 col-form-label mt-2">Collation</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_collation" class="form-control" value="<?=$msgCollation;?>">
+									</div>
+								</div>
+
+								<button type="submit" class="btn btn-primary">Submit</button>
+
+							</form>
+						</div>
+					</div>
+
+
+
+					<!-- <h2>Título</h2>
+					<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+					<p><a class="btn btn-secondary" href="#" role="button">Ver detalhes &raquo;</a></p> -->
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</div>
+
+		<hr>
+
+		</div> <!-- /container -->
+
+	</main>
+
+	<footer class="container text-center mt-5">
+		<div class="inner">
+		&copy 2018 - <?=APP_HEADER?> Todos os direitos reservados.
+		<a href="http://brunodamiao.com.br" target="_blank">by designer Bruno</a>
+		<!-- </div> -->
+    </footer>
+
+
+	<!-- Scripts -->
+  	<script src="/assets/jquery.min.js"></script>
+  	<script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
+
+	<script>
+	jQuery(function($){
+
+	    $( "#bntDb1" ).click(function() {
+	    	$( "#collapseBD2" ).slideUp().addClass('d-none');
+	    	$( "#collapseBD1" ).removeClass('d-none').slideDown();
+	    });
+	    $( "#bntDb2" ).click(function() {
+	    	$( "#collapseBD1" ).slideUp().addClass('d-none');
+	    	$( "#collapseBD2" ).removeClass('d-none').slideDown();
+	    });
+
+	});
+	</script>
+
+</body>
+</html>

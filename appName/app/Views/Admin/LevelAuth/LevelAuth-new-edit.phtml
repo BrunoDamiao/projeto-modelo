@@ -1,0 +1,152 @@
+<?php
+
+    $authSession = (object) FwBD\Session\Session::get('Auth');
+    $baseURI  = '/admin/level';
+
+    $view = $this->getData();
+    $data = ($view['data'])?? '';
+    $category = ($view['category'])?? '';
+    // pp($category);
+
+
+    if ($data) {
+        $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
+        $msgId      = ($data->level_id) ?? '';
+        $formTitle  = '<h2> Edit Data </h2>';
+        $btnClass   = 'btn-warning';
+        $msgCategory= ($data->level_category) ?? '';
+        $msgName    = ($data->level_name) ?? '';
+        $msgObs     = ($data->level_obs) ?? '';
+        $msgAction  = $baseURI.'/edit/'.$data->level_id;
+    }else{
+        $formTitle  = '<h2> Create Data </h2>';
+        $btnAction  = '<i class="fa fa-check m-right-xs"></i> Save';
+        $btnClass   = 'btn-success';
+        $msgCategory= getDataInput('level_category')?? '';        
+        $msgName    = getDataInput('level_name')?? '';        
+        $msgObs     = getDataInput('level_obs')?? '';
+        $msgAction  = $baseURI.'/create';
+    }
+    $btnBack    = '<i class="fa fa-chevron-left m-right-xs"></i> Voltar';
+?>
+
+
+<form action="<?=$msgAction;?>" class="" method="post" enctype="multipart/form-data">
+
+    <?php
+    echo $formTitle;
+    showMessageFlash('primary');
+    showMessageFlash('success');
+    showMessageFlash('info');
+    showMessageFlash('danger');
+    showMessageFlash('warning');
+    // pp($category);
+    // pp($msgCategory);
+    ?>
+    
+    <div class="form-group">
+        <div class="input-group">
+            <select name="level_category" class="form-control">
+                <?php
+                foreach ($category as $v) :
+                    $select=($msgCategory == $v->level_category)? 'selected' : null;
+                    echo '<option value="'.$v->level_category.'" '.$select.' >';
+                        echo $v->level_category;
+                    echo '</option>';
+                endforeach;
+                ?>
+            </select>
+            <span class="input-group-btn">
+                <a href="#" 
+                data-toggle="modal" data-target="#myModal"
+                title="New create level category" 
+                class="btn btn-primary btnJslist"
+                > 
+                    <span class="fa fa-plus-circle" aria-hidden="true"></span> </a>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="text" name="level_name" value="<?=$msgName;?>" class="form-control" placeholder="Informe seu Title">
+    </div>
+    <div class="form-group">
+        <textarea name="level_obs" id="" cols="19" rows="5" class="form-control" placeholder="Informe a descrição"><?=$msgObs; ?></textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" name="btnAction" class="btn btn-primary"> <?=$btnAction?> </button>
+        <a href="<?=$baseURI?>" class="btn btn-warning pull-right"><?=$btnBack?></a>
+    </div>
+</form>
+
+
+
+
+
+<!-- ##### Form Create Level ##### -->
+<div id="myModal" class="myModal modal fade" tabindex="-1" role="dialog">
+    <?php
+        $uriJs = '/admin/level';
+        $mdId = ($data->level_id) ?? ''; 
+        $btnModelAction = '<i class="fa fa-check m-right-xs"></i> Save';
+    ?>
+    <div class="datamodel" 
+        data-model="level" 
+        data-id="<?=$mdId;?>" 
+        data-routelist="<?=$uriJs?>/listcategory" 
+        data-routesave="<?=$uriJs?>/newcategory" 
+    </div>
+        <!-- data-route="/admin/level/listcategory-level"  -->
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create category system</h4>
+            </div>
+            <div class="modal-body" style="display: nonex">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr><td> -- </td></tr> -->
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form>
+
+                    <input type="hidden" name="model" value="level">
+                    <!-- <div class="form-group">
+                        <select name="level_category" class="form-control">
+                        <?php
+                        /*foreach ($category as $v) :
+                            $select=($msgCategory == $v->level_category)? 'selected' : null;
+                            echo '<option value="'.$v->level_category.'" '.$select.' >';
+                                echo $v->level_category;
+                            echo '</option>';
+                        endforeach;*/
+                        ?>
+                    </select>
+                    </div> -->
+                    <div class="form-group">
+                        <input type="text" name="level_category" value="" class="form-control" placeholder="Informe a category">
+                        <!-- <input type="text" name="level_name" value="<?//=$msgCategory;?>" class="form-control" placeholder="Informe a title"> -->
+                    </div>
+                    <div class="form-group">
+                        <textarea name="level_obs" id="" cols="19" rows="5" class="form-control" placeholder="Informe a descrição"></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btnJsSave"> <?=$btnModelAction?> </button>
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

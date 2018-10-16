@@ -1,0 +1,94 @@
+<?php
+    $avataName     = $authSession->session_user_name;
+    $avataCategory = $authSession->session_category.' '.$authSession->session_level;
+    $avataThumb    = showThumb($authSession->session_user_thumb,'user');
+?>
+
+
+<div class="col-sm-3 col-md-2 sidebar">
+    
+    <div class="profile-sidebar3">
+
+        <div class="content-profile">
+
+            <!-- SIDEBAR USERPIC -->
+            <div class="profile-userpic">
+                <img src="/<?=$avataThumb;?>" class="img-responsive" alt="">
+            </div>
+            <!-- END SIDEBAR USERPIC -->
+
+            <!-- SIDEBAR USER TITLE -->
+            <div class="profile-usertitle">
+                <div class="profile-usertitle-name">
+                    <?=$avataName?>
+                </div>
+                <div class="profile-usertitle-job">
+                    <?=$avataCategory?>
+                </div>
+            </div>
+            <!-- END SIDEBAR USER TITLE -->
+
+            <!-- SIDEBAR BUTTONS -->
+            <div class="profile-userbuttons">
+                <button type="button" class="btn btn-success btn-sm">Follow</button>
+                <button type="button" class="btn btn-danger btn-sm">Message</button>
+            </div>
+            <!-- END SIDEBAR BUTTONS -->
+
+        </div>
+
+        <!-- SIDEBAR MENU -->
+        <div class="profile-usermenu">
+            <hr>
+            <ul class="nav nav-sidebar">
+                <li class="active">
+                    <a href="#">
+                    <i class="glyphicon glyphicon-home"></i>
+                    Overview </a>
+                </li>
+                <li>
+                    <a href="#">
+                    <i class="glyphicon glyphicon-user"></i>
+                    Account Settings </a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">
+                    <i class="glyphicon glyphicon-ok"></i>
+                    Tasks </a>
+                </li>
+                <li>
+                    <a href="#">
+                    <i class="glyphicon glyphicon-flag"></i>
+                    Help </a>
+                </li>
+            </ul>
+        </div>
+        <!-- END MENU -->
+        
+    </div>
+
+
+    <!-- <ul class="nav nav-sidebar">
+        <li class="active">
+            <a href="#">Overview <span class="sr-only">(current)</span></a>
+        </li>
+        <li>
+            <a href="#">Reports</a>
+        </li>
+    </ul>
+    
+    <ul class="nav nav-sidebar">
+        <li><a href="">Nav item</a></li>
+        <li><a href="">Nav item again</a></li>
+        <li><a href="">One more nav</a></li>
+        <li><a href="">Another nav item</a></li>
+        <li><a href="">More navigation</a></li>
+    </ul>
+    
+    <ul class="nav nav-sidebar">
+        <li><a href="">Nav item again</a></li>
+        <li><a href="">One more nav</a></li>
+        <li><a href="">Another nav item</a></li>
+    </ul> -->
+
+</div>

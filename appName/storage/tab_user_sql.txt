@@ -1,0 +1,45 @@
+CREATE TABLE IF NOT EXISTS `appModelo`.`tb_user` (
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `level_id` INT(11) NULL DEFAULT NULL,
+  `user_name` VARCHAR(255) NULL DEFAULT NULL,
+  `user_email` VARCHAR(255) NULL DEFAULT NULL,
+  `user_password` VARCHAR(255) NULL DEFAULT NULL,
+  `user_show` VARCHAR(155) NULL DEFAULT NULL,
+  `user_thumb` VARCHAR(255) NULL DEFAULT NULL,
+  `user_obs` LONGTEXT NULL DEFAULT NULL,
+  `user_uri` VARCHAR(255) NULL DEFAULT NULL,
+  `user_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user_status` INT(3) NULL DEFAULT NULL,
+  `user_author` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  INDEX `fk_tb_user_tb_level_idx` (`level_id` ASC),
+  CONSTRAINT `fk_tb_user_tb_level`
+    FOREIGN KEY (`level_id`)
+    REFERENCES `appModelo`.`tb_level` (`level_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8
+
+
+
+=====================================================================
+
+
+
+CREATE TABLE IF NOT EXISTS `appModelo`.`tb_level` (
+  `level_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `level_category` VARCHAR(155) NULL DEFAULT '--',
+  `level_name` VARCHAR(155) NULL DEFAULT NULL,
+  `level_obs` LONGTEXT NULL DEFAULT NULL,
+  `level_uri` VARCHAR(255) NULL DEFAULT NULL,
+  `level_created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `level_updated` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `level_status` INT(3) NULL DEFAULT NULL,
+  `level_author` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`level_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8

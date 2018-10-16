@@ -1,0 +1,60 @@
+
+<!-- <h3> Contact </h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem tenetur cupiditate, debitis soluta! Dolorum adipisci laudantium, excepturi, non alias quod et iure officia, sunt illo corrupti? Molestias ut totam dolorum.</p> -->
+
+
+<!-- # CONTACT # -->
+<div class="container">
+    
+    <div class="section">
+		<h3 class=" center-align"><?=$this->getTitle();?></h3>
+		<p><?=APP_HEADER;?>, portal de treinamento web/mobile, online. Fundado por Bruno Silva com o objetivo de promover cursos objetivos e atuais. Com aulas práticas, objetivas e expressivas para atender as necessidades dos alunos e se tornar referência em cursos online de tecnologia..</p>
+	</div>
+
+    <div class="section">
+    
+    	<div class="row">
+
+    		<div class="col s12 l6">
+    			<script src='https://maps.googleapis.com/maps/api/js?v=3.exp'></script>
+    				<div style='overflow:hidden;height:340px;width:450px;'><div id='gmap_canvas' style='height:340px;width:450px;'></div><div><small><a href="embedgooglemaps.com/pt/">https://embedgooglemaps.com/pt/</a></small></div><div><small><a href="http://www.kumo-racing.nl/">https://www.newyorkpass.nl</a></small></div><style>#gmap_canvas img{max-width:none!important;background:none!important}</style></div><script type='text/javascript'>function init_map(){var myOptions = {zoom:10,center:new google.maps.LatLng(-22.52474,-41.938249299999995),mapTypeId: google.maps.MapTypeId.ROADMAP};map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(-22.52474,-41.938249299999995)});infowindow = new google.maps.InfoWindow({content:'<strong>Bruno Damião</strong><br>Centro Rio das Ostras, Brazil<br>'});google.maps.event.addListener(marker, 'click', function(){infowindow.open(map,marker);});infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);
+    			</script>
+    		</div>
+
+    		<div class="col s12 l6">
+	    		<form class="">
+			        <div class="input-field">
+			        	<i class="material-icons prefix">account_circle</i>
+			          	<input id="input_text" type="text" class="validate" >
+			          	<label for="input_text" class="">Nome</label>
+			        </div>
+			        <div class="input-field">
+			        	<!-- <i class="material-icons prefix">phone_iphone</i> -->
+			        	<i class="material-icons prefix">phone</i>
+				        <input id="icon_telephone" type="tel" class="validate">
+				        <label for="icon_telephone">Telephone</label>
+			        </div>
+			        <div class="input-field">
+			        	<i class="material-icons prefix">mail</i>
+			        	<input id="emailx" type="email" class="validate">
+			          	<label for="email" class="">Email</label>
+			        </div>
+			        <div class="input-field">
+			        	<i class="material-icons prefix">mode_edit</i>
+			        	<textarea id="textarea1" class="materialize-textarea"></textarea>
+			        	<label for="textarea1">Message</label>
+			        </div>
+			        <div class="input-button right-align">
+			          <button type="button" 
+			          class="waves-effect waves-light light-blue btn"> Enviar 
+			          <i class="material-icons right">send</i> </button>
+			        </div>
+			    </form>
+    		</div>
+
+    	</div>
+    
+    </div>
+
+    <br><br>
+</div>

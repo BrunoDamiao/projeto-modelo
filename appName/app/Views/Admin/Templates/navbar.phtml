@@ -1,0 +1,38 @@
+    
+    
+    <!-- Menu Site -->
+    <ul class="box-form ps-left">
+        <li><a href="/admin">Admin</a></li>
+        <?php
+        /*if ( $authSession->session_level == 'Admin' OR
+             $authSession->session_category == 'Masterkey'
+        )*/
+            echo"<li><a href='/admin/user'>User</a></li>";
+        ?>
+        <li><a href="/admin/course">Course</a></li>
+    </ul>
+    <!-- End Menu Site -->
+
+    <!-- Menu Systems -->
+    <ul class="box-form ps-right menuIn">
+        <?php
+        /*if ( $authSession->session_level == 'Admin' OR
+             $authSession->session_category == 'Masterkey'
+        ) {*/
+            // echo"<li><a href='/admin/user'>Systems</a></li>";
+            echo "<li><a href='/admin/level'>Level auth</a></li> <br>";
+        // }
+        ?>
+        <li>
+            <a href='/admin/user/profile/<?=$authSession->session_user?>'>Edit user</a>
+        </li>
+        <li><a href="/auth/logout">(X)</a></li>
+    </ul>
+    <!-- End Menu Systems -->
+
+    <div class="clean"></div>
+
+    <hr>
+
+
+<?php //pp($authSession); ?>

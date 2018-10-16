@@ -1,0 +1,57 @@
+<?php
+	
+	# Header Pager
+    require "header.phtml";
+
+    // echo "<h1> {$this->getTitle()} </h1>";
+    // echo "<h1> ".APP_HEADER." - {$this->getTitle()} </h1>";
+
+    # navbar Pager
+    # require "navbar.phtml";
+    # require "sidebar.phtml";
+
+	# Container Pager
+    # $this->render();
+
+    # Footer Pager
+    # require "footer.phtml";
+
+?>
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+    <?php
+    # navbar Pager
+    require "sidebar.phtml";
+    ?>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+        <?php
+
+        $authSession = (object) FwBD\Session\Session::get('Auth');
+        echo "<h1 class='page-header'> {$this->getTitle()} </h1>";
+        # pp($authSession);
+
+        ?>
+
+        <?php
+
+        # Container Pager
+        $this->render();
+
+        ?>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<?php
+# Footer Pager
+require "footer.phtml";
+?>

@@ -1,0 +1,231 @@
+<?php
+
+    $authSession = (object) FwBD\Session\Session::get('Auth');
+    // pp($authSession);
+    $baseURI  = '/admin/user';
+
+    $view = $this->getData();
+    $data = ($view['data'])?? '';
+    $level = ($view['level'])?? '';
+    $category = ($view['category'])?? '';
+    // pp($data);
+
+    if ($data) {
+        $formTitle  = '<h3> Edit Data </h3>';
+        $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
+        $btnClass   = 'btn-warning';
+        $msgId      = ($data->user_id) ?? '';
+        $msglevel   = ($data->level_id) ?? '2';
+        $msgName    = ($data->user_name) ?? '';
+        $msgEmail   = ($data->user_email) ?? '';
+        $msgObs     = ($data->user_obs) ?? '';
+        $msgShow    = ($data->user_show) ?? '';
+        $msgAuthor  = ($data->name_author) ?? '';
+        $msgCreated = getDateTimePTbr($data->user_created);
+        $msgUpdated = getDateTimePTbr($data->user_updated);
+        // $msgUpdated = (empty($data->name_updated))? '--' : date('d-m-Y', strtotime($data->user_updated);
+        $msgAction  = $baseURI.'/edit/'.$data->user_id;
+    }else{
+        $formTitle  = '<h3> Create Data </h3>';
+        $btnAction  = '<i class="fa fa-check m-right-xs"></i> Save';
+        $btnClass   = 'btn-success';
+        $msglevel   = getDataInput('level_id')?? '2';
+        $msgName    = getDataInput('user_name')?? '';
+        $msgEmail   = getDataInput('user_email')?? '';
+        $msgObs     = getDataInput('user_obs')?? 'informe obs';
+        $msgAuthor  = getDataInput('name_author')?? 'Author: --';
+        $msgCreated = getDataInput('name_created')?? 'Create: --';
+        $msgUpdated = getDataInput('name_updated')?? 'Update: --';
+        $msgAction  = $baseURI.'/create';
+    }
+    $formThumb  = '<h3> Thumb </h3>';
+    $thumb      = ($data->user_thumb) ?? '';
+    $msgThumb   = '/'.showThumb($thumb,'user');
+    $msgShow    = ($data->user_show) ?? '';
+    $btnBack    = '<i class="fa fa-chevron-left m-right-xs"></i> Voltar';
+
+?>
+
+<form action="<?=$msgAction;?>" class="" method="post" enctype="multipart/form-data">
+    <div class="row">
+        
+        <div class="col-md-3 col-sm-3 .col-xs-1">
+            <?php
+                echo $formThumb;
+            ?>
+            <div class="form-group">
+                <img src="<?=$msgThumb;?>" id="avatar" class="img-responsive img-thumbnail " title="<?='Avatar'?>">
+                <div class="btn-file btn btn-success btn-lg col-xs-12">
+                    <span><i class="fa fa-cloud-upload"></i> <?='Avatar'?> </span>
+                    <input type="file" name="user_thumb" id="getPrevew" />
+                </div>        
+            </div>
+
+            <div class="form-group">
+                <br><br>
+                <hr>
+                
+                <span class="label label-default"> <strong>Author: </strong>
+                    <?=$msgAuthor;?> 
+                </span> &nbsp;
+                
+                <span class="label label-default"> <strong>Create: </strong>
+                    <?=$msgCreated;?> 
+                </span> &nbsp;
+
+                <span class="label label-default"> <strong>Update: </strong>
+                    <?=$msgUpdated;?> 
+                </span>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-9 col-sm-9 .col-xs-11">
+            
+                <?php
+                echo $formTitle;
+                showMessageFlash('primary');
+                showMessageFlash('success');
+                showMessageFlash('info');
+                showMessageFlash('danger');
+                showMessageFlash('warning');
+                // pp($data);
+                // pp($msglevel);
+                // pp($level);
+                // pp($category);
+                ?>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <select name="level_id" class="form-control">
+                        <?php
+                        foreach ($level as $v) :
+                            $select = ($msglevel == $v->level_id)? ' selected' :null;                            
+                            echo '<option value="'.$v->level_id.'" '.$select.' > ';
+                                echo $v->level_category .' - '. strtoupper($v->level_name);
+                            echo '</option>';
+                        endforeach;
+                            ?>
+                        </select>
+                        <span class="input-group-btn">
+                            <a href="#" 
+                            data-toggle="modal" data-target="#myModal"
+                            title="New create level category" 
+                            class="btn btn-primary btnJslist"
+                            > 
+                                <span class="fa fa-plus-circle" aria-hidden="true"></span> </a>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" name="user_name" value="<?=$msgName;?>" class="form-control" placeholder="Informe seu Title">
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" name="user_email" value="<?=$msgEmail; ?>" class="form-control" placeholder="Informe seu e-mail">
+                </div>
+
+                <div class="form-group">
+                    <textarea name="user_obs" cols="19" rows="5" class="form-control" placeholder="Informe as observações"><?=$msgObs; ?></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group col-md-6">
+                        <input type="password" id="user_password" name="user_password" value="<?=$msgShow?>" class="form-control" placeholder="Informe a senha">
+                        <span class="input-group-btn">
+                            <a href="#" 
+                                class="btn btn-primary showpass"
+                                title="Visualizar senha" alt="Visualizar senha" 
+                                aria-hidden="true"
+                                > 
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" name="btnAction" class="btn btn-primary"> <?=$btnAction?> </button>
+                    <a href="<?=$baseURI?>" class="btn btn-warning pull-right"><?=$btnBack?></a>
+                </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+
+
+
+
+<!-- ##### Form Create Category Level ##### -->
+<div id="myModal" class="myModal modal fade" tabindex="-1" role="dialog">
+    <?php
+        $uriJs = '/admin/user';
+        $mdId = ($data->level_id) ?? ''; 
+        $btnModelAction = '<i class="fa fa-check m-right-xs"></i> Save';
+    ?>
+    <div class="datamodel" 
+        data-model="level" 
+        data-id="<?=$mdId;?>" 
+        data-routelist="<?=$uriJs?>/listlevel" 
+        data-routesave="<?=$uriJs?>/newlevel" 
+    </div>
+        <!-- data-route="/admin/level/listcategory-level"  -->
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create level user</h4>
+            </div>
+            <div class="modal-body" style="display: nonex">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr><td> -- </td></tr> -->
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form>
+
+                    <input type="hidden" name="model" value="level">
+                    <div class="form-group">
+                        <select name="level_category" class="form-control">
+                        <?php
+                        foreach ($category as $v) :
+                            echo '<option value="'.$v->level_category.'" >';
+                                echo $v->level_category;
+                            echo '</option>';
+                        endforeach;
+                        ?>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="level_name" value="" class="form-control" placeholder="Informe a title">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="level_obs" id="" cols="19" rows="5" class="form-control" placeholder="Informe a descrição"></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btnJsSave"> <?=$btnModelAction?> </button>
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
