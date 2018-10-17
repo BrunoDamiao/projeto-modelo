@@ -21,11 +21,12 @@ class Container
         if (!class_exists('\FwBD\View\View'))
             throw new \Exception("Error: Ao instaciar a class View!");
 
+        // pp($path);
         // pp($data);
         $render = new View;
-        // pp($render);
         $render->setPathViews($path);
         $render->setTitle($data['title']);
+        // pp($render);
 
         unset($data['title']);
 

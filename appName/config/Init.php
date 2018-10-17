@@ -19,21 +19,25 @@ const APP_PAGINATOR = 12; # Sets PAGINATOR: limit show register data
 
 
 /**
- * Sets PATH: separator e base uri;
+ * Sets PATH: root e separator;
  */
-const DS = DIRECTORY_SEPARATOR;
-const PATH_HOME = 'http://localhost:8080';
+define('PATH_ROOT', $_SERVER['DOCUMENT_ROOT']);
+define('DS', DIRECTORY_SEPARATOR);
+// const DS = DIRECTORY_SEPARATOR;
+// const PATH_HOME = 'http://localhost:8080';
+
 /**
  * Sets PATH: path views;
  */
 
-const PATH_VIEWS 	= __DIR__ .DS. '..' .DS. 'App' .DS. 'Views' .DS; # ../App/Views/
+const PATH_VIEWS    = PATH_ROOT .DS. '..' .DS. 'app' .DS. 'Views' .DS; # ../App/Views/
+// const PATH_VIEWS    = __DIR__ .DS. '..' .DS. 'App' .DS. 'Views' .DS; # ../App/Views/
 
 /**
  * Sets DB: banco de dados;
  */
-const DBS = 'appModelo'; # database name [sqlite3-mysql]
-// const DBS = 'appBruno'; # database name [sqlite3-mysql]
+// const DBS = 'appModelo'; # database name [sqlite3-mysql]
+const DBS = 'appBruno'; # database name [sqlite3-mysql]
 const DIRECTORY_SQLITE = '..' .DS.'storage' .DS. 'database' .DS; # path sqlite3
 
 /**

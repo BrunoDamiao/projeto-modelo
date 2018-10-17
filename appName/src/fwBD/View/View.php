@@ -8,7 +8,7 @@ class View implements iView
     private $title;
     private $data;
 
-    
+
     public static function directView($path='', array $data=[])
     {
         if ( file_exists( PATH_VIEWS . $path . ".phtml") )
@@ -40,10 +40,12 @@ class View implements iView
 
     public static function setTempViews($tempViews)
     {
+
         if (empty($tempViews))
             throw new \Exception("Error: Template View <b>{$tempViews}</b> não existe!");
 
-        Self::$tempViews = str_replace('.', '/', ucfirst($tempViews));
+        $stv = str_replace('.', '. ', $tempViews);
+        Self::$tempViews = str_replace('. ', DIRECTORY_SEPARATOR, ucwords($stv));
     }
 
     public function setPathViews($pathViews)
@@ -51,7 +53,9 @@ class View implements iView
         if (empty($pathViews))
             throw new \Exception("Error: A View <b>{$pathViews}</b> não existe!");
 
-            $this->pathViews = str_replace('.', '/', ucfirst($pathViews));
+        # $this->pathViews = str_replace('.', '/', ucfirst($pathViews));
+        $spv  = str_replace('.', '. ', $pathViews);
+        $this->pathViews = str_replace('. ', DIRECTORY_SEPARATOR, ucwords($spv));
     }
 
     public function run()
@@ -77,13 +81,15 @@ class View implements iView
 
     public function render()
     {
+
         if ( file_exists( PATH_VIEWS . $this->pathViews . ".phtml") )
             require_once PATH_VIEWS . $this->pathViews . ".phtml";
         else
             echo "Error render(): A View <strong>{$this->pathViews}</strong> não existe!";
+
     }
 
-    
+
 
 
 }

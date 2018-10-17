@@ -11,7 +11,7 @@ class SetupSystemFilter extends BaseFilter
 
         if ( get_class( Conn::getCon() ) === 'PDOException' ) {
 
-            // echo "con error";
+            echo "con error";
             // redirect('/settings');
 
             /*$pathPage = 'settings';
@@ -22,7 +22,7 @@ class SetupSystemFilter extends BaseFilter
             \FwBD\View\View::directView($pathPage, $dataPage);*/
 
         }else{
-            echo "con ok";
+            echo "con ok <br>";
         }
 
     }
