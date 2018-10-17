@@ -11,14 +11,16 @@ class SQLITE implements iDB
         // pp(CONFIG_DB);
         try {
 
-            $pdo = new PDO('sqlite:' . CONFIG_DB );
+            $pdo = new PDO('sqlite:' . CONFIG_DB['PATH_SQLITE'] );
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             // $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             return $pdo;
 
         } catch (PDOException $e) {
-            die('Error Connect DB-SQLITE: ').$e->getMessage();
+            // die('Error Connect DB-SQLITE: ').$e->getMessage();
+            pp($e->getMessage());
+            return $e;
         }
 
     }

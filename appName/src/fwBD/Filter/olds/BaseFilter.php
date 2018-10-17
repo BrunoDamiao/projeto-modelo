@@ -18,29 +18,22 @@ abstract class BaseFilter
                 $filterParams = $params;
             }
 
-            switch (ucwords($filterName)) {
-                case 'Auth':
-                    $str_Path = 'FwBD\\Filter\\SystemFilter';
-                    $str_Method  = 'Auth';
-                break;
-                case 'SetupIn':
-                    $str_Path = 'FwBD\\Filter\\SystemFilter';
-                    $str_Method  = 'SetupIn';
-                break;
+            switch ($filterName) {
+                case 'auth':
+                    $str_Path = 'FwBD\\Filter\\AuthFilter'; break;
 
+                case 'SetupIn':
+                    $str_Path = 'FwBD\\Filter\\SetupSystemFilter'; break;
                 case 'SetupOut':
-                    $str_Path = 'FwBD\\Filter\\SystemFilter';
-                    $str_Method  = 'SetupOut';
-                break;
+                    $str_Path = 'FwBD\\Filter\\SetupSystemFilter'; break;
 
                 default:
-                    $str_Path = 'App\Filters\\' . FILTERS[$filterName];
-                    $str_Method = 'Filter';
-                break;
+                    $str_Path = 'App\Filters\\' . FILTERS[$filterName]; break;
             }
 
             if (class_exists($str_Path)) {
                 $ObjFilter = new $str_Path;
+                $str_Method = 'Filter';
 
                 if (method_exists($ObjFilter, $str_Method)) {
                     call_user_func_array([$ObjFilter, $str_Method], [$filterParams]);

@@ -43,8 +43,7 @@ class Container
         if ( stristr($str_Class, 'Model') || stristr($str_Class, 'Models') )
             $dependecie = \FwBD\DBConect\DBConect::getCon();
 
-            if (!class_exists($dependecie))
-                return self::setFilter(['SetupSystem']);
+        self::setFilter(['SetupIn']);
 
         if (class_exists($str_Class)) {
             $Class = new $str_Class($dependecie);

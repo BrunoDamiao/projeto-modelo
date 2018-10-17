@@ -8,13 +8,13 @@ class UserController extends BaseController
 {
     private $model;
     private $baseUri   = '/admin/user';
-    private $totalPage = APP_PAGINATOR;    
+    private $totalPage = APP_PAGINATOR;
 
 
     public function __construct($params)
     {
         parent::__construct($params);
-        Container::setFilter(['auth']);
+        Container::setFilter(['Auth']);
         Container::setTemplateView('admin.templates.template');
         $this->model = Container::getServices('App\Models\Admin\User');
 
@@ -25,14 +25,14 @@ class UserController extends BaseController
 
 
 
-    
+
     /**
      * Methods GET
      */
-    
+
     public function getIndex()
     {
-        Container::setFilter(['userGestao']);        
+        Container::setFilter(['userGestao']);
 
         $title = 'Manager Users';
 
@@ -46,13 +46,13 @@ class UserController extends BaseController
 
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A 
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
             ->where('U.user_id', 1, '!=')
             ->where('U.user_id', $authSession->session_user, '!=')
-            ->all();  
+            ->all();
 
         // pp($data->getResult(),1);
         Container::getView('admin.user.user', compact('title','data'));
@@ -95,15 +95,15 @@ class UserController extends BaseController
             }
 
             echo json_encode([
-                'msg_alert' => $alertClas, 
-                'msg_text'  => 'O registro ' . $user->user_name.', foi <strong>'.$alertStr.'</strong> com sucesso!', 
+                'msg_alert' => $alertClas,
+                'msg_text'  => 'O registro ' . $user->user_name.', foi <strong>'.$alertStr.'</strong> com sucesso!',
             ],false);
 
         }else{
 
             echo json_encode([
-                'msg_alert' => 'alert-success', 
-                'msg_text'  => "Error ao mudar o status do registro! Favor entrar em contato com suporte.", 
+                'msg_alert' => 'alert-success',
+                'msg_text'  => "Error ao mudar o status do registro! Favor entrar em contato com suporte.",
             ],false);
 
         }
@@ -114,11 +114,11 @@ class UserController extends BaseController
         Container::setFilter(['userGestao']);
 
         $title = 'Manager Users';
-        $data = [];        
+        $data = [];
         $authSession = (object) Container::getSession('get', ['Auth']);
-        
+
         $level = Container::getServices('App\Models\Admin\Level')
-            ->select('level_id, level_category, 
+            ->select('level_id, level_category,
                 level_name')
             ->where('level_category', 'MASTERKEY','!=')
             ->where('level_name', '--', '!=')
@@ -126,7 +126,7 @@ class UserController extends BaseController
             ->getResult();
 
         $category = Container::getServices('App\Models\Admin\Level')
-            ->select('level_id, level_category, 
+            ->select('level_id, level_category,
                 level_name')
             ->where('level_category', 'MASTERKEY','!=')
             ->where('level_name', '--')
@@ -142,7 +142,7 @@ class UserController extends BaseController
         // $data  = $this->model->find( $this->getParams('id') );
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A 
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
@@ -160,7 +160,7 @@ class UserController extends BaseController
             ->where('level_name', '--' )
             ->all()
             ->getResult();
-        
+
         Container::getView('admin.user.user-profile', compact('title','data','level','category'));
     }
 
@@ -172,7 +172,7 @@ class UserController extends BaseController
         // $data  = $this->model->find( $this->getParams('id') );
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A 
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
@@ -205,7 +205,7 @@ class UserController extends BaseController
         $StrDelete .= " <a href='/admin/user' class='btn btn-danger btn-xs' title='Não' data-dismiss='alert' aria-hidden='true'>Não<i class='glyphicon glyphicon-remove-sign'></i></a>";
 
         setMsgFlash('warning', "$StrDelete");
-        
+
         return redirect("{$this->baseUri}");
     }
 
@@ -215,7 +215,7 @@ class UserController extends BaseController
         $page = $this->getParams();
         $id   = $this->getParams('id');
         $data = $this->model->find($id);
-        
+
         #IMAGE
         if ( !$this->image->deleteImage($data->user_thumb) ){
             setMsgFlash('danger', $this->image->getMsgError());
@@ -341,7 +341,7 @@ class UserController extends BaseController
         $encryptForm = \FwBD\Encrypt\Encrypt::hashCode($dataformEdit['user_password']);
         if ( $user->user_password === $encryptForm ) {
             unset($dataformEdit['user_password']);
-            unset($dataformEdit['user_show']);            
+            unset($dataformEdit['user_show']);
         }else{
             $dataformEdit['user_show'] = $dataformEdit['user_password'];
             $dataformEdit['user_password'] = $encryptForm;
@@ -410,7 +410,7 @@ class UserController extends BaseController
         $encryptForm = \FwBD\Encrypt\Encrypt::hashCode($dataformEdit['user_password']);
         if ( $user->user_password === $encryptForm ) {
             unset($dataformEdit['user_password']);
-            unset($dataformEdit['user_show']);            
+            unset($dataformEdit['user_show']);
         }else{
             $dataformEdit['user_show'] = $dataformEdit['user_password'];
             $dataformEdit['user_password'] = $encryptForm;
@@ -427,21 +427,21 @@ class UserController extends BaseController
             redirect("{$this->baseUri}/profile/{$url}");
         }
     }
-    
+
 
 
 
     /**
      * Methods MODALS
      */
-    
 
-    
-    
+
+
+
     /**
      * Methods HELPERS
      */
-    
+
     private function createDataForm()
     {
         $request = Container::getServices('FwBD\Request\Request');
@@ -476,7 +476,7 @@ class UserController extends BaseController
             $page = 1;
             $id = $this->params[0];
         }
-        
+
         if ( empty($tipo) )
             return $page;
         else
@@ -495,7 +495,7 @@ class UserController extends BaseController
                 'user_updated'  => date("Y-m-d H:i:s"),
                 'user_status'   => '1',
                 'user_author'   => $authSession->session_user
-            ];        
+            ];
         }else{
             $result = [
                 'user_uri'      => cleanString($data['user_name']),

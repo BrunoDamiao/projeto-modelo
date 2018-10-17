@@ -6,7 +6,7 @@
 define('APP_NAME', 'app-fwBd');
 define('APP_DEBUG', true);
 define('APP_KEY', '@AppFwBd$2018%');
-define('DRIVE', 'mysql');
+// define('DRIVE', 'mysql');
 // define('DRIVE', 'sqlite');
 
 
@@ -36,8 +36,8 @@ const PATH_VIEWS    = PATH_ROOT .DS. '..' .DS. 'app' .DS. 'Views' .DS; # ../App/
 /**
  * Sets DB: banco de dados;
  */
-// const DBS = 'appModelo'; # database name [sqlite3-mysql]
-const DBS = 'appBruno'; # database name [sqlite3-mysql]
+const DBS = 'appModelo'; # database name [sqlite3-mysql]
+// const DBS = 'appBruno'; # database name [sqlite3-mysql]
 const DIRECTORY_SQLITE = '..' .DS.'storage' .DS. 'database' .DS; # path sqlite3
 
 /**

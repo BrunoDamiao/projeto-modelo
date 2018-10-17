@@ -8,9 +8,51 @@
     <link rel="icon" type="image/png" href="<?=PATH_FAVICON?>" />
 
 	<!-- Style Bootstrap -->
-    <link rel="stylesheet" href="/assets/libs/Bootstrap/css/Bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/libs/bootstrap/css/bootstrap.min.css">
 </head>
 <body>
+
+	<?php
+
+		$view = $this->getData();
+		// pp($view,1);
+		$drive = ($view['data'][0])?? '';
+		$data  = ($view['data'][1])?? '';
+		// pp($drive);
+		// pp($data);
+
+		$msgSqlite	  = ($data['PATH_SQLITE']) ?? '';
+		$msgHost	  = ($data['HOST']) ?? '';
+		$msgDBName 	  = ($data['DBS']) ?? '';
+		$msgUSName 	  = ($data['USER']) ?? '';
+		$msgPassword  = ($data['PASS']) ?? '';
+		$msgCharset	  = ($data['CHARSET']) ?? '';
+		$msgCollation = ($data['COLLATION']) ?? '';
+
+		$btnDrive1 = ($drive === 'mysql')?  : 'disabled';
+		$btnDrive2 = ($drive === 'sqlite')? : 'disabled';
+
+
+		/*$msgHost	  = ($data->setup_host) ?? '';
+			$msgDBName 	  = ($data->setup_dbname) ?? '';
+			$msgUSName 	  = ($data->setup_usname) ?? '';
+				$msgPassword  = ($data->setup_password) ?? '';
+				$msgCharset	  = ($data->setup_charset) ?? '';
+				$msgCollation = ($data->setup_collation) ?? '';*/
+
+			/*$msgHost	= getDataInput('setup_host') ?? 'localhost';
+			$msgDBName 	= getDataInput('setup_dbname') ?? 'appModelo';
+			$msgUSName 	= getDataInput('setup_usname') ?? 'root';
+				$msgSenha 	= getDataInput('setup_password') ?? 'beca';
+				$msgCharset	= getDataInput('setup_charset') ?? 'utf8';
+				$msgCollation= getDataInput('setup_collation') ?? 'utf8_unicode_ci';*/
+				// $msgPrefix	= getDataInput('setup_prefix') ?? 'tb_';
+
+			// pp($CONFIG_DB);
+			// $path = DIRECTORY_SQLITE.'configBD.json';
+			// $dt = FwBD\Json\Json::create($CONFIG_DB, $path);
+			// pp($dt);
+	?>
 
 	<main role="main">
 
@@ -21,65 +63,44 @@
 				<h1 class="display-4">Settings DB!</h1>
 				<p>Defina a melhor configuração para seu banco de dados!</p>
 
-				<button class="btn btn-primary mt-4" type="button" id="bntDb1"> SQLite 3 </button>
-				<button class="btn btn-primary mt-4" type="button" id="bntDb2"> MariaBD </button>
+				<button class="btn btn-primary mt-4" type="button" <?=$btnDrive2?> id="bntDb1"> SQLite 3 </button>
+				<button class="btn btn-primary mt-4" type="button" <?=$btnDrive1?> id="bntDb2"> MariaBD </button>
 			</div>
 		</div>
-
-			<?php
-
-				$view = $this->getData();
-				// pp($view,1);
-				$data = (object) ($view['data'])?? '';
-				// pp($data);
-
-				$msgHost	  = ($data->setup_host) ?? '';
-				$msgDBName 	  = ($data->setup_dbname) ?? '';
-				$msgUSName 	  = ($data->setup_usname) ?? '';
-  				$msgPassword  = ($data->setup_password) ?? '';
-  				$msgCharset	  = ($data->setup_charset) ?? '';
-  				$msgCollation = ($data->setup_collation) ?? '';
-
-  				/*$msgHost	= getDataInput('setup_host') ?? 'localhost';
-					$msgDBName 	= getDataInput('setup_dbname') ?? 'appModelo';
-					$msgUSName 	= getDataInput('setup_usname') ?? 'root';
-	  				$msgSenha 	= getDataInput('setup_password') ?? 'beca';
-	  				$msgCharset	= getDataInput('setup_charset') ?? 'utf8';
-	  				$msgCollation= getDataInput('setup_collation') ?? 'utf8_unicode_ci';*/
-	  				// $msgPrefix	= getDataInput('setup_prefix') ?? 'tb_';
-
-					// pp($CONFIG_DB);
-					// $path = DIRECTORY_SQLITE.'configBD.json';
-					// $dt = FwBD\Json\Json::create($CONFIG_DB, $path);
-					// pp($dt);
-			?>
 
 		<div class="container" style="min-height: 28rem;">
 			<!-- Exemplo de linha de colunas -->
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8">
-
+				<?php
+					showMessageFlash('primary');
+					showMessageFlash('success');
+					showMessageFlash('info');
+					showMessageFlash('danger');
+					showMessageFlash('warning');
+				?>
 					<div class="d-none" id="collapseBD1">
 						<div class="card card-body">
 							<h2>SQLITE-3</h2>
-							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+							<form action="/setup/create-sqlite" method="post" class="form-signin">
+
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Database Host</label>
+									<div class="col-sm-9">
+										<input type="text" name="setup_host" class="form-control" value="<?=$msgSqlite?>">
+									</div>
+								</div>
+
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form>
 						</div>
 					</div>
 
 					<div class="d-nonex" id="collapseBD2">
 						<div class="card card-body">
 							<h2>MariaBD</h2>
-
-							<?php
-							showMessageFlash('primary');
-							showMessageFlash('success');
-							showMessageFlash('info');
-							showMessageFlash('danger');
-							showMessageFlash('warning');
-							?>
-
-							<form action="/setup/create" method="post" class="form-signin">
+							<form action="/setup/create-mysql" method="post" class="form-signin">
 
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label mt-2">Database Host</label>
@@ -109,7 +130,6 @@
 								</div>
 
 								<button type="submit" class="btn btn-primary">Submit</button>
-
 							</form>
 						</div>
 					</div>

@@ -107,11 +107,19 @@ class BaseModel implements iBaseModel
     public static function exec(string $execSql)
     {
         // pp($execSql);
-        $pdo = \FwBD\DBConect\DBConect::getCon();
+        #$pdo = \FwBD\DBConect\DBConect::getCon();
 
         // $pdo->exec($execSql);
-        return $pdo->exec($execSql);
+        #return $pdo->exec($execSql);
         // return $pdo->lastInsertId();
+
+        try {
+            $pdo = \FwBD\DBConect\DBConect::getCon();
+            return $pdo->exec($execSql);
+        } catch (PDOException $e) {
+            die('Error execute sql in BaseModel::exec() ').$e->getMessage();
+        }
+
     }
 
     ## CRUD ######################################################################

@@ -18,7 +18,8 @@ class SetupController extends BaseController
         parent::__construct($params);
         # Create dataBase com tb_User
         // Container::setFilter(['createDB']);
-        // Container::setFilter(['SetupSystem']);
+        Container::setFilter(['SetupOut']);
+        // Container::setFilter(['middleware']);
         // Container::setTemplateView('setup.templates.template');
         // $this->model = Container::getServices('App\Models\Auth');
     }
@@ -31,15 +32,7 @@ class SetupController extends BaseController
     public function getIndex()
     {
         $title = 'Settings DB';
-        $data = [
-            'setup_host'        => 'localhost',
-            // 'setup_host'        => '',
-            'setup_dbname'      => 'appModelo',//DBS,
-            'setup_usname'      => 'root',
-            'setup_password'    => 'beca',
-            'setup_charset'     => 'utf8',
-            'setup_collation'   => 'utf8_unicode_ci'
-        ];
+        $data = [DRIVE, CONFIG_DB];
         Container::getView('setup.settings', compact('title','data'));
     }
 
@@ -48,11 +41,12 @@ class SetupController extends BaseController
     /**
      * Methods POST
      */
-        public function postCreate()
+        public function postCreateMysql()
         {
 
             $request = new \FwBD\Request\Request;
             $rs = $request->post();
+            pp($rs,1);
 
             $validate = new \FwBD\Validate\Validate;
             $rules = [
@@ -78,6 +72,13 @@ class SetupController extends BaseController
             $dt = FwBD\Json\Json::create($rs, $path);
             pp($dt);
 
+        }
+
+        public function postCreateSqlite()
+        {
+            $request = new \FwBD\Request\Request;
+            $rs = $request->post();
+            pp($rs,1);
         }
 
 

@@ -6,10 +6,6 @@
  * [ Configuração para versão do php > 7 ]
  */
 
-/*if ( defined(DRIVE) )
-	define('DRIVE', 'sqlite');
-	*/
-
 if ( !defined('DRIVE') )
 	define('DRIVE', 'sqlite');
 
@@ -34,11 +30,11 @@ switch (DRIVE) {
 		#...
 		break;
 	case 'sqlite':
-		define('CONFIG_DB', DIRECTORY_SQLITE.DBS);
+		define('CONFIG_DB', ['PATH_SQLITE' => DIRECTORY_SQLITE.DBS.'.db']);
 		break;
 
 	default:
-		define('CONFIG_DB', DIRECTORY_SQLITE.DBS);
+		define('CONFIG_DB', ['PATH_SQLITE' => DIRECTORY_SQLITE.DBS.'.db']);
 		break;
 }
 

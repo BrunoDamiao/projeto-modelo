@@ -18,7 +18,7 @@ class HomeController extends BaseController
     {
         parent::__construct($params);
         // Container::setFilter(['createDB']);
-        // Container::setFilter(['SetupSystem']);
+        // Container::setFilter(['SetupIn']);
         // Container::setFilter(['middleware2']);
         Container::setTemplateView('site.templates.template');
     }

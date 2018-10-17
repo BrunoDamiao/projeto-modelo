@@ -18,7 +18,7 @@ class AuthController extends BaseController
         parent::__construct($params);
         # Create dataBase com tb_User
         // Container::setFilter(['createDB']);
-        // Container::setFilter(['SetupSystem']);
+        // Container::setFilter(['SetupIn']);
         Container::setTemplateView('auth.templates.template');
         $this->model = Container::getServices('App\Models\Auth');
 
@@ -96,6 +96,7 @@ class AuthController extends BaseController
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request')->post();
         // array_pop($request);
+        pp($request);
 
         #VALIDATE
         $validate = Container::getServices('FwBD\Validate\Validate','Auth');
