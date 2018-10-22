@@ -104,22 +104,24 @@ class BaseModel implements iBaseModel
 
 
     ## EXEC SCRIPT SQL ###########################################################
+    /**
+     * exec: Realiza conexão com BD e executa uma consulta direto no banco;
+     * @param string $execSql: string sql da consulta
+     * @return
+     */
     public static function exec(string $execSql)
     {
-        // pp($execSql);
-        #$pdo = \FwBD\DBConect\DBConect::getCon();
-
-        // $pdo->exec($execSql);
-        #return $pdo->exec($execSql);
-        // return $pdo->lastInsertId();
-
         try {
-            $pdo = \FwBD\DBConect\DBConect::getCon();
+            $pdo = \FwBD\DBConect\DBConect::getCon(DB_CONFIG);
             return $pdo->exec($execSql);
+            # return $pdo->lastInsertId();
         } catch (PDOException $e) {
             die('Error execute sql in BaseModel::exec() ').$e->getMessage();
         }
 
+        /*$pdo = \FwBD\DBConect\DBConect::getCon(DB_DRIVE,DB_CONFIG);
+        return $pdo->exec($execSql);
+        # return $pdo->lastInsertId();*/
     }
 
     ## CRUD ######################################################################

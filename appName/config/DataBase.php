@@ -6,38 +6,78 @@
  * [ Configuração para versão do php > 7 ]
  */
 
-if ( !defined('DRIVE') )
-	define('DRIVE', 'sqlite');
 
-switch (DRIVE) {
+$connectionsJson = getJsonDBConfig(PATH_STORAGE . 'database' .DS);
+$connections = [
+            'sqlite'    => [
+                            'DBHost'        => PATH_DATABASE . DB_NAME . '.db',
+                            'DBName'        => DB_NAME . '.db'
+                        ],
 
-	case 'mysql':
-		define('CONFIG_DB', [
-			'HOST' 		=> 'localhost',
-			'DBS' 		=> DBS,
-			'USER' 		=> 'root',
-			'PASS' 		=> 'beca',
-			'CHARSET' 	=> 'utf8',
-			'COLLATION' => 'utf8_unicode_ci'
-		]);
+            'mysql'     => [
+                            'DBHost'        => 'localhost',
+                            'DBName'        => DB_NAME,
+                            'DBUser'        => 'root',
+                            'DBPass'        => 'beca',
+                            'DBCharset'     => 'utf8',
+                            'DBCollation'   => 'utf8_unicode_ci'
+                        ],
 
-		break;
+            'oracle'    => [
+                            'DBHost'        => 'localhost',
+                            'DBName'        => DB_NAME,
+                            'DBUser'        => 'root',
+                            'DBPass'        => 'beca',
+                            'DBCharset'     => 'utf8',
+                            'DBCollation'   => 'utf8_unicode_ci'
+                        ],
 
-	case 'oracle':
-		#...
-		break;
-	case 'postgres':
-		#...
-		break;
-	case 'sqlite':
-		define('CONFIG_DB', ['PATH_SQLITE' => DIRECTORY_SQLITE.DBS.'.db']);
-		break;
+            'postgres'  => [
+                            'DBHost'        => 'localhost',
+                            'DBName'        => DB_NAME,
+                            'DBUser'        => 'root',
+                            'DBPass'        => 'beca',
+                            'DBCharset'     => 'utf8',
+                            'DBCollation'   => 'utf8_unicode_ci'
+                        ],
 
-	default:
-		define('CONFIG_DB', ['PATH_SQLITE' => DIRECTORY_SQLITE.DBS.'.db']);
-		break;
-}
+            'sqlserver'     => [
+                            'DBHost'        => 'localhost',
+                            'DBName'        => DB_NAME,
+                            'DBUser'        => 'root',
+                            'DBPass'        => 'beca',
+                            'DBCharset'     => 'utf8',
+                            'DBCollation'   => 'utf8_unicode_ci'
+                        ],
+        ];
+
+
+define('DB_CONNECTIONS', $connections);
+
+if ( $connectionsJson )
+	define('DB_CONFIG', $connectionsJson);
+else
+	define('DB_CONFIG', []);
 
 
 
+/*
+$confgSQlite = [
+	'DBHost' 		=> PATH_DATABASE . DB_NAME . '.db',
+	'DBName' 		=> DB_NAME . '.db',
+	'DBUser' 		=> '--',
+	'DBPass' 		=> '--',
+	'DBCharset'   	=> '--',
+	'DBCollation'	=> '--'
+];
+
+$confgMysql = [
+	'DBHost' 		=> 'localhost',
+	'DBName' 		=> DB_NAME,
+	'DBUser' 		=> 'root',
+	'DBPass' 		=> 'beca',
+	'DBCharset'   	=> 'utf8',
+	'DBCollation'	=> 'utf8_unicode_ci'
+];
+*/
 

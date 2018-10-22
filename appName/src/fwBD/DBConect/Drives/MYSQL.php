@@ -8,15 +8,15 @@ use PDOException;
 class MYSQL implements iDB
 {
 
-    public function getConBD()
+    public function getConBD(array $dbConfig)
     {
 
-        $host       = CONFIG_DB['HOST'];
-        $db         = CONFIG_DB['DBS'];
-        $user       = CONFIG_DB['USER'];
-        $pass       = CONFIG_DB['PASS'];
-        $charset    = CONFIG_DB['CHARSET'];
-        $collation  = CONFIG_DB['COLLATION'];
+        $host       = $dbConfig['DBHost'];
+        $db         = $dbConfig['DBName'];
+        $user       = $dbConfig['DBUser'];
+        $pass       = $dbConfig['DBPass'];
+        $charset    = $dbConfig['DBCharset'];
+        $collation  = $dbConfig['DBCollation'];
 
         try {
 
@@ -28,10 +28,9 @@ class MYSQL implements iDB
             return $pdo;
 
         } catch (PDOException $e) {
-
-            pp($e->getMessage());
+            // pp($e->getMessage());
+            // pp($e);
             return $e;
-
         }
 
     }

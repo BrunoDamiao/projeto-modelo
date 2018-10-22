@@ -22,12 +22,12 @@ class AuthController extends BaseController
         Container::setTemplateView('auth.templates.template');
         $this->model = Container::getServices('App\Models\Auth');
 
-        $this->deleteSessionInit();
+        // $this->deleteSessionInit();
     }
 
     public function __destruct()
     {
-        $this->deleteSessionInit();
+        // $this->deleteSessionInit();
         // Container::getSession('delete', ['Auth']);
     }
 

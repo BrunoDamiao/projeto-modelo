@@ -1,55 +1,41 @@
 <?php
 /**
- * File de config. de inicialização do AppOsHome
+ * Set init systems
  */
-
-define('APP_NAME', 'app-fwBd');
 define('APP_DEBUG', true);
 define('APP_KEY', '@AppFwBd$2018%');
-// define('DRIVE', 'mysql');
-// define('DRIVE', 'sqlite');
-
-
-/**
- * Settings Systems
- */
-const APP_HEADER  	= 'Projeto AppBruno'; # Sets APP_HEADER: title default app
-const APP_SUBHEAD 	= 'FrameWorks Bruno Damião'; # Sets APP_SUBHEAD: subtitle default app
-const APP_PAGINATOR = 12; # Sets PAGINATOR: limit show register data
-
-
-/**
- * Sets PATH: root e separator;
- */
-define('PATH_ROOT', $_SERVER['DOCUMENT_ROOT']);
+define('APP_ROOT', $_SERVER['DOCUMENT_ROOT']);
 define('DS', DIRECTORY_SEPARATOR);
-// const DS = DIRECTORY_SEPARATOR;
-// const PATH_HOME = 'http://localhost:8080';
 
 /**
- * Sets PATH: path views;
+ * Set headers systems
  */
-
-const PATH_VIEWS    = PATH_ROOT .DS. '..' .DS. 'app' .DS. 'Views' .DS; # ../App/Views/
-// const PATH_VIEWS    = __DIR__ .DS. '..' .DS. 'App' .DS. 'Views' .DS; # ../App/Views/
-
-/**
- * Sets DB: banco de dados;
- */
-const DBS = 'appModelo'; # database name [sqlite3-mysql]
-// const DBS = 'appBruno'; # database name [sqlite3-mysql]
-const DIRECTORY_SQLITE = '..' .DS.'storage' .DS. 'database' .DS; # path sqlite3
+const APP_NAME      = 'Projeto AppName';
+const APP_SLOGAN    = 'FrameWorks Bruno Damião';
+const APP_PAGINATOR = 12;
 
 /**
- * Sets PATH: mídias e imagens;
+ * Set database systems
  */
-const PATH_MIDIAS 	= 'assets'. DS .'midias'. DS;
-const PATH_FAVICON	= PATH_MIDIAS .'icon.png'; # logo Principal
-const PATH_LOGO		= PATH_MIDIAS .'logo.png'; # logo Principal
-const PATH_LOGO2	= PATH_MIDIAS .'logo2.png'; # logo Secundaria
-const PATH_MESCLE	= PATH_MIDIAS .'marca-dagua.gif'; # marca D´água
-const PATH_LOADER 	= PATH_MIDIAS .'loader-face.gif'; # loader.gif
-const PATH_AVATAR 	= PATH_MIDIAS .'avatar-b.png';
+const DB_NAME       = 'appModelo';
+// const APP_DBNAME    = 'appBruno';
+
+/**
+ * Set absolute path in the system;
+ */
+const PATH_ROOT     = APP_ROOT .DS. '..' .DS;
+const PATH_VIEWS    = PATH_ROOT . 'app' .DS. 'Views' .DS;
+# paths databases
+const PATH_STORAGE  = PATH_ROOT . 'storage' .DS;
+const PATH_DATABASE = PATH_STORAGE . 'database' .DS;
+# paths midias
+const PATH_MIDIAS   = 'assets'. DS .'midias'. DS;
+const PATH_FAVICON  = PATH_MIDIAS .'icon.png'; # logo Principal
+const PATH_LOGO     = PATH_MIDIAS .'logo.png'; # logo Principal
+const PATH_LOGO2    = PATH_MIDIAS .'logo2.png'; # logo Secundaria
+const PATH_MESCLE   = PATH_MIDIAS .'marca-dagua.gif'; # marca D´água
+const PATH_LOADER   = PATH_MIDIAS .'loader-face.gif'; # loader.gif
+const PATH_AVATAR   = PATH_MIDIAS .'avatar-b.png';
 
 /**
  *  Set Errors

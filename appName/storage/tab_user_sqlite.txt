@@ -1,29 +1,40 @@
-CREATE TABLE "tb_user" (
-    `user_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    `level_id` INTEGER NOT NULL,
-    `user_name` TEXT NOT NULL,
-    `user_email` TEXT NOT NULL,
-    `user_password` TEXT NOT NULL,
-    `user_show` TEXT,
-    `user_thumb` TEXT,
-    `user_obs` TEXT,
-    `user_uri` TEXT NOT NULL,
-    `user_created` TEXT,
-    `user_updated` TEXT,
-    `user_status` INTEGER(3) DEFAULT 1,
-    `user_auth` INTEGER(3) DEFAULT 1
-)
+=====================================================================
+# CREATE TABLE Levels e Users # =====================================================================
+
+'CREATE TABLE IF NOT EXISTS tb_level (
+        level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        level_category TEXT NOT NULL,
+        level_name TEXT NOT NULL,
+        level_obs TEXT,
+        level_uri TEXT NOT NULL,
+        level_created TEXT,
+        level_updated TEXT,
+        level_status INTEGER(3) DEFAULT 1,
+        level_author INTEGER(3) DEFAULT 1
+    )'
+
+'CREATE TABLE IF NOT EXISTS tb_user (
+        user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+        level_id INTEGER NOT NULL,
+        user_name TEXT NOT NULL,
+        user_email TEXT NOT NULL,
+        user_password TEXT NOT NULL,
+        user_show TEXT,
+        user_thumb TEXT,
+        user_obs TEXT,
+        user_uri TEXT NOT NULL,
+        user_created TEXT,
+        user_updated TEXT,
+        user_status INTEGER(3) DEFAULT 1,
+        user_author INTEGER(3) DEFAULT 1,
+        FOREIGN KEY (level_id)
+        REFERENCES tb_level(level_id) ON UPDATE CASCADE ON DELETE CASCADE
+    )'
+
 
 =====================================================================
+# INSERT INTO TABLE Levels e Users # =====================================================================
 
-CREATE TABLE "tb_level" (
-    `level_id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    `level_category` TEXT NOT NULL,
-    `level_name` TEXT NOT NULL,
-    `level_obs` TEXT,
-    `level_uri` TEXT NOT NULL,
-    `level_created` TEXT,
-    `level_updated` TEXT,
-    `level_status` INTEGER(3) DEFAULT 1,
-    `level_auth` INTEGER(3) DEFAULT 1
-)
+$sqlLevel = 'INSERT INTO tb_level (level_id, level_category, level_name, level_obs, level_uri, level_created, level_updated, level_status, level_author)' . 'VALUES (:level_id, :level_category, :level_name, :level_obs, :level_uri, :level_created, :level_updated, :level_status, :level_author); ';
+
+$sqlUser = 'INSERT INTO tb_user (level_id, user_name, user_email, user_password, user_show, user_thumb, user_obs, user_uri, user_created, user_updated, user_status, user_author)' . 'VALUES (:level_id, :user_name, :user_email, :user_password, :user_show, :user_thumb, :user_obs, :user_uri, :user_created, :user_updated, :user_status, :user_author);';

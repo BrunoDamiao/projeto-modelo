@@ -15,6 +15,9 @@ class Json
         $dir = ( empty($path) )? self::$path : $path ;
         // $dir = self::$path;
 
+        // pp( self::$path );
+        // pp($dir,1);
+
         // $session = $datasJson;
         $getJson = self::get();
 
@@ -108,6 +111,31 @@ class Json
             return true;
 
         return false;
+    }
+
+
+# ================================================================================= #
+
+    public static function createJson(array $dataJson, $path)
+    {
+        if (file_exists($path) && !empty($getJson))
+            $dataJson = self::get($path);
+
+        if ( file_put_contents($path, json_encode($dataJson)) )
+            return true;
+
+        return false;
+    }
+
+    public static function deleteJson($file)
+    {
+        if(is_file($file))
+        {
+            if ( unlink($file) )
+                return true;
+
+            return false;
+        }
     }
 
 

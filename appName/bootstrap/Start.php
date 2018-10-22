@@ -5,9 +5,9 @@
 
 /*< init = inicialização do app >*/
 require __DIR__ . "/../config/Session.php";
+require __DIR__ . "/../config/Helpers.php";
 require __DIR__ . "/../config/Init.php";
 require __DIR__ . "/../config/DataBase.php";
-require __DIR__ . "/../config/Helpers.php";
 require __DIR__ . "/../config/Mail.php";
 
 /*foreach (glob( __DIR__ . "/../config/*.php") as $arquivo) {

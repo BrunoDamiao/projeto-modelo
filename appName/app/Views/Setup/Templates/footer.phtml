@@ -1,19 +1,70 @@
-    <footer class="footer">
-      <div class="inner">
-        &copy 2018 - <?=APP_HEADER?> Todos os direitos reservados.
-        <a href="http://brunodamiao.com.br" target="_blank">by designer Bruno</a>
-      </div>
+  <footer class="container text-center mt-5">
+    <div class="inner">
+    &copy 2018 - <?=APP_NAME?> Todos os direitos reservados.
+    <a href="http://brunodamiao.com.br" target="_blank">by designer Bruno</a>
+    <!-- </div> -->
     </footer>
-
-  </div>
-
-
 
 
   <!-- Scripts -->
-  <script src="/assets/jquery.min.js"></script>
-  <!-- <script src="<?=$uriAssets;?>/js/init.js"></script> -->
-  <!-- <script src="<?=$uriAssets;?>/js/init.js"></script> -->
+    <script src="/assets/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/popper.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
 
-  </body>
+  <script>
+  jQuery(function($){
+
+      // $('[data-toggle="popover"]').popover();
+      $('[data-toggle="popover"]').popover();
+
+      $( "#btnSqlite" ).click(function() {
+        $( "#pnlSqlite" ).removeClass('d-none').slideDown();
+
+        // $( "#pnlSqlite" ).slideUp().addClass('d-none');
+        $( "#pnlMysql" ).slideUp().addClass('d-none');
+        $( "#pnlOracle" ).slideUp().addClass('d-none');
+        $( "#pnlPostgres" ).slideUp().addClass('d-none');
+        $( "#pnlSqlserver" ).slideUp().addClass('d-none');
+      });
+      $( "#btnMysql" ).click(function() {
+        $( "#pnlMysql" ).removeClass('d-none').slideDown();
+
+        $( "#pnlSqlite" ).slideUp().addClass('d-none');
+        // $( "#pnlMysql" ).slideUp().addClass('d-none');
+        $( "#pnlOracle" ).slideUp().addClass('d-none');
+        $( "#pnlPostgres" ).slideUp().addClass('d-none');
+        $( "#pnlSqlserver" ).slideUp().addClass('d-none');
+      });
+      $( "#btnOracle" ).click(function() {
+        $( "#pnlOracle" ).removeClass('d-none').slideDown();
+
+        $( "#pnlSqlite" ).slideUp().addClass('d-none');
+        $( "#pnlMysql" ).slideUp().addClass('d-none');
+        // $( "#pnlOracle" ).slideUp().addClass('d-none');
+        $( "#pnlPostgres" ).slideUp().addClass('d-none');
+        $( "#pnlSqlserver" ).slideUp().addClass('d-none');
+      });
+      $( "#btnPostgres" ).click(function() {
+        $( "#pnlPostgres" ).removeClass('d-none').slideDown();
+
+        $( "#pnlSqlite" ).slideUp().addClass('d-none');
+        $( "#pnlMysql" ).slideUp().addClass('d-none');
+        $( "#pnlOracle" ).slideUp().addClass('d-none');
+        // $( "#pnlPostgres" ).slideUp().addClass('d-none');
+        $( "#pnlSqlserver" ).slideUp().addClass('d-none');
+      });
+      $( "#btnSqlserver" ).click(function() {
+        $( "#pnlSqlserver" ).removeClass('d-none').slideDown();
+
+        $( "#pnlSqlite" ).slideUp().addClass('d-none');
+        $( "#pnlMysql" ).slideUp().addClass('d-none');
+        $( "#pnlOracle" ).slideUp().addClass('d-none');
+        $( "#pnlPostgres" ).slideUp().addClass('d-none');
+        // $( "#pnlSqlserver" ).slideUp().addClass('d-none');
+      });
+
+  });
+  </script>
+
+</body>
 </html>

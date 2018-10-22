@@ -1,6 +1,8 @@
 <?php
+
 	$view = $this->getData();
 	$data = ($view['data'])?? '';
+
 ?>
 
 <main role="main">
@@ -9,14 +11,14 @@
 	<div class="jumbotron text-center">
 		<div class="container">
 			<img class="mb-4" src="/<?=PATH_LOGO2?>" alt="" >
-			<h1 class="display-4"><?=$this->getTitle();?>!</h1>
+			<h1 class="display-4">Settings DataBase!</h1>
 			<p>Defina a melhor configuração para seu banco de dados!</p>
 
 			<button class="btn btn-primary mt-4" type="button" id="btnSqlite"> SQLite 3 </button>
 			<button class="btn btn-primary mt-4" type="button" id="btnMysql"> MySQL </button>
-			<button class="btn btn-secondary mt-4" type="button" id="btnOracleX"> Oracle SQL </button>
-			<button class="btn btn-secondary mt-4" type="button" id="btnPostgresX"> PostgreSQL </button>
-			<button class="btn btn-secondary mt-4" type="button" id="btnSqlserverX"> SQL Server </button>
+			<button class="btn btn-primary mt-4" type="button" id="btnOracle"> Oracle SQL </button>
+			<button class="btn btn-primary mt-4" type="button" id="btnPostgres"> PostgreSQL </button>
+			<button class="btn btn-primary mt-4" type="button" id="btnSqlserver"> SQL Server </button>
 		</div>
 	</div>
 
@@ -36,7 +38,7 @@
 				<div class="d-none" id="pnlSqlite">
 					<div class="card card-body">
 						<h2>SQLite3</h2>
-						<form action="/setup/create-conexao" method="post" class="form-signin">
+						<form action="/setup/dbcreate" method="post" class="form-signin">
 
 							<input type="hiddenx" name="DBDrive" class="form-control" value="sqlite">
 
@@ -79,7 +81,7 @@
 				<div class="d-none" id="pnlMysql">
 					<div class="card card-body">
 						<h2>MySQL</h2>
-						<form action="/setup/create-conexao" method="post" class="form-signin">
+						<form action="/setup/dbcreate" method="post" class="form-signin">
 
 							<input type="hiddenx" name="DBDrive" class="form-control" value="mysql">
 
@@ -120,7 +122,7 @@
 				<div class="d-none" id="pnlOracle">
 					<div class="card card-body">
 						<h2>Oracle SQL</h2>
-						<form action="/setup/create-conexao" method="post" class="form-signin">
+						<form action="/setup/dbcreate" method="post" class="form-signin">
 
 							<input type="hiddenx" name="DBDrive" class="form-control" value="oracle">
 
@@ -161,7 +163,7 @@
 				<div class="d-none" id="pnlPostgres">
 					<div class="card card-body">
 						<h2>PostgresSQL</h2>
-						<form action="/setup/create-conexao" method="post" class="form-signin">
+						<form action="/setup/dbcreate" method="post" class="form-signin">
 
 							<input type="hiddenx" name="DBDrive" class="form-control" value="postgres">
 
@@ -202,7 +204,7 @@
 				<div class="d-none" id="pnlSqlserver">
 					<div class="card card-body">
 						<h2>SQL Server</h2>
-						<form action="/setup/create-conexao" method="post" class="form-signin">
+						<form action="/setup/dbcreate" method="post" class="form-signin">
 
 							<input type="hiddenx" name="DBDrive" class="form-control" value="sqlserver">
 

@@ -222,3 +222,25 @@ function getDateTimePTbr($datetime, $strFormat = 'd-m-Y H:i:s')
         return 'not date time';
 }
 
+/*public function getFiles($pathFile)
+{
+    foreach (glob($pathFile) as $file) {
+        if (file_exists($file))
+            return $file;
+    }
+}*/
+
+# Cria e set a constante DB_CONFIG com as config. do banco de dados
+function getJsonDBConfig($dir)
+{
+    foreach (glob($dir."*.json") as $file) {
+        if (file_exists($file)) {
+            // echo "getJsonDBConfig ";
+            $json_file = file_get_contents($file, true);
+            return json_decode($json_file, true);
+        }else{
+            echo "not";
+        }
+        // pp($file,1);
+    }
+}
