@@ -2,7 +2,7 @@
 	$view = $this->getData();
 	$data = ($view['data'])?? '';
 
-	if ($data) {
+	// if ($data) {
         $formTitle  = '<h3> Edit Data </h3>';
         $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
         $btnClass   = 'btn-warning';
@@ -13,9 +13,9 @@
         $msgObs     = ($data->user_obs) ?? '';
         $msgShow    = ($data->user_show) ?? '';
         $msgAuthor  = ($data->name_author) ?? '';
-        $msgCreated = getDateTimePTbr($data->user_created);
-        $msgUpdated = getDateTimePTbr($data->user_updated);
-    }
+        /*$msgCreated = getDateTimePTbr($data->user_created);
+        $msgUpdated = getDateTimePTbr($data->user_updated);*/
+    // }
 
 ?>
 

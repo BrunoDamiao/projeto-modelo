@@ -31,7 +31,6 @@ class Container
 
         $render->setData($data);
         $render->run();
-
     }
 
     /**
@@ -85,6 +84,8 @@ class Container
      */
     public static function getPDO(array $db_config=[])
     {
+        Container::setFilter(['SetupIn']);
+
         $config = !empty($db_config)? $db_config : DB_CONFIG;
         // pp($config,1);
         return \FwBD\DBConect\DBConect::getCon($config);

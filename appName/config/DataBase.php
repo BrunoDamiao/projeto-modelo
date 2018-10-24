@@ -10,44 +10,48 @@
 $connectionsJson = getJsonDBConfig(PATH_STORAGE . 'database' .DS);
 $connections = [
             'sqlite'    => [
-                            'DBHost'        => PATH_DATABASE . DB_NAME . '.db',
-                            'DBName'        => DB_NAME . '.db'
+                            'host'       => PATH_DATABASE . DB_NAME . '.db',
+                            'name'       => DB_NAME . '.db',
+                            'user'       => 'PDO::ATTR_ERRMODE',
+                            'password'   => 'PDO::ERRMODE_EXCEPTION',
+                            'charset'    => 'PDO::ATTR_DEFAULT_FETCH_MODE',
+                            'collation'  => 'PDO::FETCH_OBJ'
                         ],
 
             'mysql'     => [
-                            'DBHost'        => 'localhost',
-                            'DBName'        => DB_NAME,
-                            'DBUser'        => 'root',
-                            'DBPass'        => 'beca',
-                            'DBCharset'     => 'utf8',
-                            'DBCollation'   => 'utf8_unicode_ci'
+                            'host'       => 'localhost',
+                            'name'       => DB_NAME,
+                            'user'       => 'root',
+                            'password'   => 'beca',
+                            'charset'    => 'utf8',
+                            'collation'  => 'utf8_unicode_ci'
                         ],
 
             'oracle'    => [
-                            'DBHost'        => 'localhost',
-                            'DBName'        => DB_NAME,
-                            'DBUser'        => 'root',
-                            'DBPass'        => 'beca',
-                            'DBCharset'     => 'utf8',
-                            'DBCollation'   => 'utf8_unicode_ci'
+                            'ost'        => 'localhost',
+                            'ame'        => DB_NAME,
+                            'user'       => 'root',
+                            'password'   => 'beca',
+                            'charset'    => 'utf8',
+                            'collation'  => 'utf8_unicode_ci'
                         ],
 
             'postgres'  => [
-                            'DBHost'        => 'localhost',
-                            'DBName'        => DB_NAME,
-                            'DBUser'        => 'root',
-                            'DBPass'        => 'beca',
-                            'DBCharset'     => 'utf8',
-                            'DBCollation'   => 'utf8_unicode_ci'
+                            'ost'        => 'localhost',
+                            'ame'        => DB_NAME,
+                            'user'       => 'root',
+                            'password'   => 'beca',
+                            'charset'    => 'utf8',
+                            'collation'  => 'utf8_unicode_ci'
                         ],
 
             'sqlserver'     => [
-                            'DBHost'        => 'localhost',
-                            'DBName'        => DB_NAME,
-                            'DBUser'        => 'root',
-                            'DBPass'        => 'beca',
-                            'DBCharset'     => 'utf8',
-                            'DBCollation'   => 'utf8_unicode_ci'
+                            'ost'        => 'localhost',
+                            'ame'        => DB_NAME,
+                            'user'       => 'root',
+                            'password'   => 'beca',
+                            'charset'    => 'utf8',
+                            'collation'  => 'utf8_unicode_ci'
                         ],
         ];
 
@@ -56,8 +60,6 @@ define('DB_CONNECTIONS', $connections);
 
 if ( $connectionsJson )
 	define('DB_CONFIG', $connectionsJson);
-else
-	define('DB_CONFIG', []);
 
 
 

@@ -24,11 +24,12 @@ Router::get('about', 'HomeController@about');
 Router::group(['prefix'=>'setup'], function() {
 
 	Router::get('', 'SetupController@index');
-	Router::post('create-conexao', 'SetupController@createconexao');
+	Router::post('', 'SetupController@setup');
+
+
+	/*Router::post('create-conexao', 'SetupController@createconexao');
 	Router::get('create-master', 'SetupController@createmaster');
-	Router::post('create-master', 'SetupController@createmaster');
-
-
+	Router::post('create-master', 'SetupController@createmaster');*/
 	/*Router::post('create-sqlite', 'SetupController@createSqlite');
 	Router::post('create-mysql', 'SetupController@createMysql');*/
 

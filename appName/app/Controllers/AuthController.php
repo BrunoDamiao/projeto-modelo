@@ -106,14 +106,11 @@ class AuthController extends BaseController
         ] );
         $validate->validateData($this->model->getRules(), $request);
 
-        pp('oi '.$validate->getStatus(),1);
-
         if ($validate->getStatus()) {
             setDataInput($request);
             setMsgFlash('warning', $validate->getMessages());
             return redirect('/auth');
         }
-
 
         #CRIPTOGRAFA A PASS
         $request['user_password'] = Encrypt::hashCode($request['user_password']);
@@ -127,6 +124,7 @@ class AuthController extends BaseController
             ->where('auth.user_status', '1')
             ->all();
         $datas = $this->model->getResult();
+        // pp($datas,1);
 
         #VALIDA 00: USER SESSION - Verifica se sessao auth existe
         if ( Container::getSession('has', ['Auth']) ){

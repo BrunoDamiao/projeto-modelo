@@ -10,10 +10,15 @@ class SQLITE implements iDB
     {
 
         try {
+            $pdo = new PDO('sqlite:' . $configDB['host'] );
 
-            $pdo = new PDO('sqlite:' . $configDB['DBHost'] );
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ); # [PDO::FETCH_ASSOC]
+            if ($configDB['user'] === 'PDO::ATTR_ERRMODE')
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if ($configDB['charset'] === 'PDO::ATTR_DEFAULT_FETCH_MODE')
+                $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+
+            /*$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ); # [PDO::FETCH_ASSOC]*/
 
             return $pdo;
 
@@ -23,6 +28,11 @@ class SQLITE implements iDB
             return $e;
         }
 
+    }
+
+    public function getConInitBD(array $dbConfig)
+    {
+        return $this->getConBD($dbConfig);
     }
 
 

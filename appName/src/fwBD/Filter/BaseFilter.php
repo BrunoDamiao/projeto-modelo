@@ -24,14 +24,14 @@ abstract class BaseFilter
                     $str_Method  = 'Auth';
                 break;
 
-                case 'SetupDBConect': # criado p/ class DBConect()
+                case 'SetupIn': # criado p/ class DBConect()
                     $str_Path = 'FwBD\\Filter\\SystemFilter';
-                    $str_Method  = 'SetupDBConect';
+                    $str_Method  = 'Filter';
                 break;
 
-                case 'SetupTab': # criar p/ pages setup config
+                case 'SetupOut': # criado p/ class DBConect()
                     $str_Path = 'FwBD\\Filter\\SystemFilter';
-                    $str_Method  = 'SetupTab';
+                    $str_Method  = 'SetupOut';
                 break;
 
                 default:
