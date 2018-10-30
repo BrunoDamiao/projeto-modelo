@@ -23,13 +23,13 @@ class AdminController extends BaseController
         $title = 'Dashboard';
         Container::getView('admin.home', compact('title','user','post','json'));
     }
-    
+
 
     /**
      * Methods POST
      */
-    
-    
+
+
     /**
      * Methods HELPERS
      */

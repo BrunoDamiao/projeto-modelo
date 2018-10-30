@@ -1,0 +1,64 @@
+<?php
+	$baseURI  = '/auth';
+?>
+
+  <main role="main" class="inner cover">
+
+    <?php
+      
+      showMessageFlash('primary');
+      showMessageFlash('success');
+      showMessageFlash('info');
+      showMessageFlash('danger');
+      showMessageFlash('warning');
+
+    ?>
+
+    <form action="/auth/create" method="post" class="form-signin">
+      <img class="mb-4" src="/<?=PATH_LOGO2?>" alt="" >
+
+      <h1 class="h3 mb-3 font-weight-normal">Create new account</h1>
+      
+      <div class="form-group">
+        <input type="text" id="formGroupExampleInput" class="form-control bmail" placeholder="Name" required autofocus>
+
+        <input type="text" id="formGroupExampleInput2" class="form-control bpass" placeholder="Email" required autofocus>
+
+        <input type="password" id="formGroupExampleInput3" class="form-control bmail" placeholder="Password" required>
+
+        <input type="password" id="formGroupExampleInput4" class="form-control bpass" placeholder="Confirm Password" required>
+      </div>
+
+      <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+      
+      <!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p> -->
+      <p class="mt-4 mb-3 text-muted">
+        sign in? <a href="/auth">click here</a>
+        <br>
+        forgot your password? <a href="/auth/forgot">click here</a>
+      </p>
+    </form>
+  </main>
+
+<!-- 
+<form action="/auth/create" method="post">
+    <div class="">
+        <input type="text" class="validate" >
+        <label for="input_text" class="">Nome</label>
+    </div>
+    <div class="">
+      <input type="email" class="validate">
+        <label for="email" class="">Email</label>
+    </div>
+    <div class="">
+      <input type="password" class="validate">
+        <label for="password" class="">Senha</label>
+    </div>
+    <div class="">
+      <input type="password" class="validate">
+        <label for="password" class="">Confirmar Senha</label>
+    </div>
+    <div class="input-button">
+      <button type="button" class=""> Cadastrar </button>
+    </div>
+</form> -->

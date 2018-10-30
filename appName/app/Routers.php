@@ -6,13 +6,13 @@ use FwBD\Router\Router as Router;
 
 
 # HOME
-// Router::get('admin/{:name}', function($e) { pp($e); });
 
 
 Router::get('', 'HomeController@index');
 Router::get('contact', 'HomeController@contact');
 Router::get('about', 'HomeController@about');
 
+// Router::get('admin/{:name}', function($e) { pp($e); });
 /*Router::get('about', 'HomeController@about', ['middleware']);
 	Router::get('about', 'HomeController@about', ['middleware'=>'teste01']);
 	Router::get('about', 'HomeController@about', ['middleware'=>['prm01', 'prm02', 'prm03']]);
@@ -26,20 +26,6 @@ Router::group(['prefix'=>'setup'], function() {
 	Router::get('', 'SetupController@index');
 	Router::post('', 'SetupController@setup');
 
-
-	/*Router::post('create-conexao', 'SetupController@createconexao');
-	Router::get('create-master', 'SetupController@createmaster');
-	Router::post('create-master', 'SetupController@createmaster');*/
-	/*Router::post('create-sqlite', 'SetupController@createSqlite');
-	Router::post('create-mysql', 'SetupController@createMysql');*/
-
-	/*Router::post('login', 'AuthController@auth');
-	Router::get('create', 'AuthController@create');
-	Router::post('create', 'AuthController@create');
-	Router::get('forgot', 'AuthController@forgot');
-	Router::post('forgot', 'AuthController@forgot');
-	Router::get('logout', 'AuthController@logout');*/
-
 });
 
 # AUTH
@@ -47,31 +33,58 @@ Router::group(['prefix'=>'auth'], function() {
 
 	Router::get('', 'AuthController@index');
 	Router::post('login', 'AuthController@auth');
+	Router::post('forgotin', 'AuthController@forgotIn');
+	Router::get('logout', 'AuthController@logout');
 
-	Router::get('create', 'AuthController@create');
+	/*Router::get('create', 'AuthController@create');
 	Router::post('create', 'AuthController@create');
 
 	Router::get('forgot', 'AuthController@forgot');
-	Router::post('forgot', 'AuthController@forgot');
-
-	Router::get('logout', 'AuthController@logout');
+	Router::post('forgot', 'AuthController@forgot');*/
 
 });
-
-
-
-
-
-
-
-
 
 # ADMIN
 Router::group(['prefix'=>'admin', 'namespace'=>'admin'], function() {
 
 	Router::get('', 'AdminController@index');
+	# Profile
+	Router::get('profile/{:id}', 'UserController@profile');
+	Router::post('profile/{:id}', 'UserController@profile');
 
 });
+
+# USER
+Router::group(['prefix'=>'admin/user', 'namespace'=>'admin'], function() {
+
+	Router::get('', 'UserController@index');
+	Router::get('jstatus', 'UserController@jstatus');
+	Router::get('status/{:id}', 'UserController@status');
+
+	Router::get('create', 'UserController@create');
+	Router::post('create', 'UserController@create');
+
+	Router::get('edit/{:id}', 'UserController@edit');
+	Router::post('edit/{:id}', 'UserController@edit');
+
+	Router::get('delete/{:id}', 'UserController@delete');
+	Router::get('destroy/{:id}', 'UserController@destroy');
+
+	# MODALS list/new Level
+	// Router::post('listlevel', 'LevelAuthController@listlevel');
+	// Router::post('newlevel', 'LevelAuthController@newlevel');
+	/*Router::post('listlevel', 'LevelAuthController@listlevel');
+	Router::post('newlevel', 'LevelAuthController@newlevel');*/
+
+});
+
+
+
+
+
+
+
+
 
 # CATEGORY SYSTEMS
 Router::group(['prefix'=>'admin/category', 'namespace'=>'admin'], function() {
@@ -111,33 +124,7 @@ Router::group(['prefix'=>'admin/level', 'namespace'=>'admin'], function() {
 });
 
 
-# USER
-Router::group(['prefix'=>'admin/user', 'namespace'=>'admin'], function() {
 
-	Router::get('', 'UserController@index');
-	Router::get('jstatus', 'UserController@jstatus');
-	Router::get('status/{:id}', 'UserController@status');
-
-	Router::get('create', 'UserController@create');
-	Router::post('create', 'UserController@create');
-
-	Router::get('edit/{:id}', 'UserController@edit');
-	Router::post('edit/{:id}', 'UserController@edit');
-
-	# Profile
-	Router::get('profile/{:id}', 'UserController@profile');
-	Router::post('profile/{:id}', 'UserController@profile');
-
-	Router::get('delete/{:id}', 'UserController@delete');
-	Router::get('destroy/{:id}', 'UserController@destroy');
-
-	# MODALS list/new Level
-	// Router::post('listlevel', 'LevelAuthController@listlevel');
-	// Router::post('newlevel', 'LevelAuthController@newlevel');
-	Router::post('listlevel', 'LevelAuthController@listlevel');
-	Router::post('newlevel', 'LevelAuthController@newlevel');
-
-});
 
 
 

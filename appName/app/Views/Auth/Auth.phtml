@@ -7,40 +7,110 @@
 
 ?>
 
-	<main role="main" class="inner cover">
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sistema desinvolvido por Bruno Damião - theme Vali.">
 
-		<form action="/auth/login" method="post" class="form-signin">
-			<img class="mb-4" src="/<?=PATH_LOGO2?>" alt="" >
+	<link rel="icon" href="/<?=PATH_FAVICON?>">
+    <title><?=APP_NAME?> - <?=$this->getTitle();?></title>
 
-			<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-			<?php
-				showMessageFlash('primary');
-				showMessageFlash('success');
-				showMessageFlash('info');
-				showMessageFlash('warning');
-				showMessageFlash('danger');
-			?>
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="assets/theme/css/main.css">
 
-			<label for="inputEmail" class="sr-only">Email address</label>
-			<input type="email" id="user_email" name="user_email" class="form-control bmail" placeholder="Email address" requiredx autofocusx>
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
 
-			<label for="inputPassword" class="sr-only">Password</label>
-			<input type="password" id="user_password" name="user_password" class="form-control bpass" placeholder="Password" requiredx>
+  <body>
+    <section class="material-half-bg">
+      <div class="cover"></div>
+    </section>
 
-			<div class="checkbox mb-3">
-				<label>
-					<input type="checkbox" value="remember-me"> Remember me
-				</label>
-			</div>
+    <section class="login-content">
 
-			<button type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
+      <div class="logo">
+        <h1> AppModelo </h1>
+        <!-- <h1><img src="/<?//=PATH_LOGO?>" alt="" width="190"></h1> -->
+      </div>
 
-			<!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p> -->
-			<p class="mt-4 mb-3 text-muted">
-				forgot your password? <a href="/auth/forgot">click here</a>
-				<br> new user? <a href="/auth/create">create new account</a>
-			</p>
-		</form>
-	</main>
+      <div class="login-box">
+        <form class="login-form" action="/auth/login" method="post">
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>SIGN IN</h3>
+          <?php
+			showMessageFlash('primary');
+			showMessageFlash('success');
+			showMessageFlash('info');
+			showMessageFlash('warning');
+			showMessageFlash('danger');
+		  ?>
+          <div class="form-group">
+            <label class="control-label">USERNAME</label>
+            <input class="form-control" name="user_email" type="text" placeholder="Email" autofocus>
+          </div>
+          <div class="form-group">
+            <label class="control-label">PASSWORD</label>
+            <input class="form-control" name="user_password" type="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <div class="utility">
+              <div class="animated-checkbox">
+                <label>
+                  <input type="checkbox"><span class="label-text">Stay Signed in</span>
+                </label>
+              </div>
+              <p class="semibold-text mb-2"><a href="#" data-toggle="flip">Forgot Password ?</a></p>
+            </div>
+          </div>
+          <div class="form-group btn-container">
+            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>SIGN IN</button>
+          </div>
+        </form>
+
+        <form class="forget-form" action="/auth/forgotin" method="post">
+          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Forgot Password ?</h3>
+          <?php
+			showMessageFlash('primary');
+			showMessageFlash('success');
+			showMessageFlash('info');
+			showMessageFlash('warning');
+			showMessageFlash('danger');
+		  ?>
+          <div class="form-group">
+            <label class="control-label">EMAIL</label>
+            <input class="form-control" type="text" name="user_email" placeholder="Email">
+          </div>
+          <div class="form-group btn-container">
+            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>RESET</button>
+          </div>
+          <div class="form-group mt-3">
+            <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i> Back to Login</a></p>
+          </div>
+        </form>
+      </div>
+
+    </section>
 
 
+
+
+
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <script type="text/javascript">
+      // Login Page Flipbox control
+      $('.login-content [data-toggle="flip"]').click(function() {
+      	$('.login-box').toggleClass('flipped');
+      	return false;
+      });
+    </script>
+  </body>
+</html>

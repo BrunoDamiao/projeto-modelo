@@ -7,7 +7,7 @@ use FwBD\DI\Container;
 class UserController extends BaseController
 {
     private $model;
-    private $baseUri   = '/admin/user';
+    private $root   = '/admin/user';
     private $totalPage = APP_PAGINATOR;
 
 
@@ -32,29 +32,23 @@ class UserController extends BaseController
 
     public function getIndex()
     {
-        Container::setFilter(['userGestao']);
-
         $title = 'Manager Users';
 
         $authSession = (object) Container::getSession('get', ['Auth']);
-        /*$data  = $this->model
-            ->select('user_id, level_id, user_name, user_email, user_password, user_show, user_thumb, user_obs, user_uri, user_created, user_updated, user_status, user_author')
-            // ->join('tb_user','tb_user.user_id = tb_user.user_author' )
-            ->where('user_id', 1, '!=')
-            ->where('user_id', $authSession->session_user, '!=')
-            ->all();  */
 
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appModelo.tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
             ->where('U.user_id', 1, '!=')
             ->where('U.user_id', $authSession->session_user, '!=')
-            ->all();
+            ->all()
+            ->getResult();
+            // pp($data->getResult(),1);
+            // pp($data,1);
 
-        // pp($data->getResult(),1);
         Container::getView('admin.user.user', compact('title','data'));
     }
 
@@ -66,11 +60,11 @@ class UserController extends BaseController
 
         # MODEL
         if ($this->model->update($user->user_id, $dataformEdit) ){
-            setMsgFlash('success', "Status do registro: <strong>{$user->user_name}</strong>, foi editado com sucesso!");
-            redirect("{$this->baseUri}");
+            setMsgFlash('success', "<strong>Parabéns!</strong> O registro: <strong>{$user->user_name}</strong>, foi editado com sucesso!");
+            redirect("{$this->root}");
         }else{
-            setMsgFlash('danger', "Error ao editar status do registro! Favor entrar em contato com suporte.");
-            redirect("{$this->baseUri}");
+            setMsgFlash('danger', "<strong>Atenção!</strong> Error ao editar status do registro! Favor entrar em contato com suporte.");
+            redirect("{$this->root}");
         }
     }
 
@@ -111,8 +105,6 @@ class UserController extends BaseController
 
     public function getCreate()
     {
-        Container::setFilter(['userGestao']);
-
         $title = 'Manager Users';
         $data = [];
         $authSession = (object) Container::getSession('get', ['Auth']);
@@ -161,13 +153,13 @@ class UserController extends BaseController
             ->all()
             ->getResult();
 
+        pp($data,1);
+
         Container::getView('admin.user.user-profile', compact('title','data','level','category'));
     }
 
     public function getEdit()
     {
-        Container::setFilter(['userGestao']);
-
         $title = 'Manager Users';
         // $data  = $this->model->find( $this->getParams('id') );
         $data = $this->model
@@ -206,7 +198,7 @@ class UserController extends BaseController
 
         setMsgFlash('warning', "$StrDelete");
 
-        return redirect("{$this->baseUri}");
+        return redirect("{$this->root}");
     }
 
     public function getDestroy()
@@ -224,13 +216,13 @@ class UserController extends BaseController
         # MODEL
         if ( $data->user_id == Container::getSession('get', ['Auth'])['session_user'] ){
             setMsgFlash('warning', "Usuário <strong>{$data->user_name}</strong> não pode ser exluido, pois se encontra logado no sistema!");
-            redirect("{$this->baseUri}");
+            redirect("{$this->root}");
         }elseif ( !empty($data->user_id) && $this->model->delete($data->user_id) ){
             setMsgFlash('success', "Registro <strong>{$data->user_name}</strong> foi removido com sucesso!");
-            redirect("{$this->baseUri}");
+            redirect("{$this->root}");
         }else{
             setMsgFlash('danger', "Error ao excluir o registro <strong>{$data->user_name}</strong>! Tente novamente mais tarde.");
-            redirect("{$this->baseUri}");
+            redirect("{$this->root}");
         }
     }
 
@@ -245,8 +237,7 @@ class UserController extends BaseController
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request');
         $dataStore = $request->all();
-        array_pop($dataStore);
-        // pp($dataStore,1);
+        // array_pop($dataStore);
 
         #VALIDATE
         $validate = Container::getServices('FwBD\Validate\Validate','Admin\User');
@@ -255,8 +246,9 @@ class UserController extends BaseController
         if ($validate->getStatus()) {
             setDataInput($dataStore);
             setMsgFlash('warning', $validate->getMessages());
-            return redirect("{$this->baseUri}/create");
+            return redirect("{$this->root}/create");
         }
+        // pp($dataStore,1);
 
         #IMAGE
         if ( $request->hasfiles('user_thumb') ) {
@@ -268,7 +260,7 @@ class UserController extends BaseController
             if ( $this->image->getMsgError() ) {
                 setDataInput($dataStore);
                 setMsgFlash('danger', $this->image->getMsgError() );
-                return redirect("{$this->baseUri}/create");
+                return redirect("{$this->root}/create");
             }
 
             $dataStore['user_thumb'] = $this->image->getNameImage();
@@ -284,12 +276,13 @@ class UserController extends BaseController
         # MODEL
         if ($this->model->insert($dataStore) ){
             setMsgFlash('success', "O registro <strong>{$dataStore['user_name']}</strong>, foi criado com sucesso!");
-            redirect("{$this->baseUri}/create");
+            redirect("{$this->root}/create");
         }else{
             setMsgFlash('danger', "Error ao criar novo registro! Favor entrar em contato com suporte.");
-            redirect("{$this->baseUri}/create");
+            redirect("{$this->root}/create");
         }
     }
+
 
     public function postEdit()
     {
@@ -315,7 +308,7 @@ class UserController extends BaseController
         if ($validate->getStatus()) {
             setDataInput($dataformEdit);
             setMsgFlash('warning', $validate->getMessages());
-            return redirect("{$this->baseUri}/edit/{$url}");
+            return redirect("{$this->root}/edit/{$url}");
         }
 
         # MODEL
@@ -331,7 +324,7 @@ class UserController extends BaseController
             if ( $this->image->getMsgError() ) {
                 setDataInput($dataformEdit);
                 setMsgFlash('danger', $this->image->getMsgError() );
-                redirect("{$this->baseUri}/edit/{$url}");
+                redirect("{$this->root}/edit/{$url}");
             }
 
             $dataformEdit['user_thumb'] = $this->image->getNameImage();
@@ -353,10 +346,10 @@ class UserController extends BaseController
         # MODEL
         if ($this->model->update($user->user_id, $dataformEdit) ){
             setMsgFlash('success', "O registro: <strong>{$dataformEdit['user_name']}</strong>, foi editado com sucesso!");
-            redirect("{$this->baseUri}/edit/{$url}");
+            redirect("{$this->root}/edit/{$url}");
         }else{
             setMsgFlash('danger', "Error ao editar registro! Favor entrar em contato com suporte.");
-            redirect("{$this->baseUri}/edit/{$url}");
+            redirect("{$this->root}/edit/{$url}");
         }
     }
 
@@ -384,7 +377,7 @@ class UserController extends BaseController
         if ($validate->getStatus()) {
             setDataInput($dataformEdit);
             setMsgFlash('warning', $validate->getMessages());
-            return redirect("{$this->baseUri}/profile/{$url}");
+            return redirect("{$this->root}/profile/{$url}");
         }
 
         # MODEL
@@ -400,7 +393,7 @@ class UserController extends BaseController
             if ( $this->image->getMsgError() ) {
                 setDataInput($dataformEdit);
                 setMsgFlash('danger', $this->image->getMsgError() );
-                redirect("{$this->baseUri}/profile/{$url}");
+                redirect("{$this->root}/profile/{$url}");
             }
 
             $dataformEdit['user_thumb'] = $this->image->getNameImage();
@@ -421,10 +414,10 @@ class UserController extends BaseController
         # MODEL
         if ($this->model->update($user->user_id, $dataformEdit) ){
             setMsgFlash('success', "O registro <strong>{$dataformEdit['user_name']}</strong>, foi editado com sucesso!");
-            redirect("{$this->baseUri}/profile/{$url}");
+            redirect("{$this->root}/profile/{$url}");
         }else{
             setMsgFlash('danger', "Error ao editar registro! Favor entrar em contato com suporte.");
-            redirect("{$this->baseUri}/profile/{$url}");
+            redirect("{$this->root}/profile/{$url}");
         }
     }
 
@@ -505,6 +498,14 @@ class UserController extends BaseController
         }
 
         return $result;
+    }
+
+    private function setMgsJson($alert='success', $text)
+    {
+        echo json_encode([
+                'msg_alert' => "$alert",
+                'msg_text'  => "$text"
+            ],false);
     }
 
 

@@ -16,19 +16,13 @@ class AuthController extends BaseController
     public function __construct($params)
     {
         parent::__construct($params);
-        # Create dataBase com tb_User
-        // Container::setFilter(['createDB']);
-        // Container::setFilter(['SetupIn']);
-        Container::setTemplateView('auth.templates.template');
+        // Container::setTemplateView('auth.templates.template');
         $this->model = Container::getServices('App\Models\Auth');
-
-        // $this->deleteSessionInit();
     }
 
     public function __destruct()
     {
-        // $this->deleteSessionInit();
-        // Container::getSession('delete', ['Auth']);
+        $this->deleteSessionInit();
     }
 
 
@@ -77,15 +71,6 @@ class AuthController extends BaseController
 
         redirect('/auth');
     }
-
-    # Page setup systems #
-    public function getSettings()
-    {
-        echo "string";
-        /*$title = 'Settings Systems';
-        Container::getView('Settings', compact('title'));*/
-    }
-
 
     /**
      * Methods POST
@@ -277,6 +262,79 @@ class AuthController extends BaseController
         }else{
             setMsgFlash('danger', "Não foi possivel realizar o cadastro, tente novamente mais tarde.");
             redirect('/auth/create');
+        }
+
+    }
+
+    public function postForgotIn()
+    {
+
+        #REQUEST
+        $request = Container::getServices('FwBD\Request\Request')->post();
+        // array_pop($request);
+        // pp($request,1);
+
+        #VALIDATE
+        $validate = Container::getServices('FwBD\Validate\Validate','Auth');
+        $this->model->setRules(['user_email' => 'requerid | email | min:2 | max:15']);
+        $validate->validateData($this->model->getRules(), $request);
+
+        if ($validate->getStatus()) {
+            setDataInput($request);
+            setMsgFlash('warning', $validate->getMessages());
+            return redirect('/auth');
+        }
+
+        # AUTENTICANDO OS DADOS
+        $data = $this->model
+                    ->where('user_email', $request['user_email'])
+                    ->all()
+                    ->getResult()[0];
+
+        if ( $data ) {
+            ## Gera uma nova Senha aleatória de 4 a 8 digito.
+            $NewPass = $this->gerar_senha(8);
+            $NewPassCode = Encrypt::hashCode($NewPass);
+
+            $dataPassword = [
+                'user_password' => $NewPassCode,
+                'user_show'     => $NewPass
+            ];
+
+            ## Atualiza nova senha do User no banco
+            $this->model->update($data->user_id, $dataPassword);
+
+            ## Disparar Email com a NOVA SENHA.
+                $nome = $data->user_name;
+                $email = $data->user_email;
+
+                $assunto = EMAIL_LEMBRETE['assunto'];
+                $altBody = EMAIL_LEMBRETE['altBody'];
+
+                $message  = '';
+                $message .= EMAIL_LEMBRETE['msgTitle'];
+                $message .= "<p> Sua NOVA Senha de acesso é: <strong> <a href='";
+                $message .= PATH_HOME.'/auth';
+                $message .= "' target='_blank'>";
+                $message .= "{$NewPass}";
+                $message .= "</a></strong> <br>";
+                $message .= " Válida por 30 segundos! </p> ";
+                $message .= EMAIL_LEMBRETE['msgAtt'];
+
+            // $mail = Email::smtpEmail($nome, $email, $assunto, $altBody, $message);
+            $mail = \FwBD\Mail\Email::smtpEmail($nome, $email, $assunto, $altBody, $message);
+
+            if ($mail) {
+                setMsgFlash('success', "Sua NOVA SENHA foi enviado para sua caixa de e-mail informado a baixo. $NewPass");
+                redirect('/auth');
+            }else{
+                setMsgFlash('danger', "Falha no envio do e-mail, tentar novamente mais tarde!");
+                redirect('/auth');
+            }
+
+        }else{
+            setMsgFlash('danger', "Este e-mail não está cadastrado no sistema.");
+            redirect('/auth');
         }
 
     }

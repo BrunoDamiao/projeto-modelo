@@ -1,94 +1,149 @@
 <?php
-    $avataName     = $authSession->session_user_name;
-    $avataCategory = $authSession->session_category.' '.$authSession->session_level;
-    $avataThumb    = showThumb($authSession->session_user_thumb,'user');
+  $avataName     = $authSession->session_user_name;
+  $avataCategory = $authSession->session_category.' '.$authSession->session_level;
+  $avataThumb    = showThumb($authSession->session_user_thumb,'user');
 ?>
 
+  <body class="app sidebar-mini rtl">
+    <!-- Navbar-->
+    <header class="app-header">
+      <a class="app-header__logo" href="/admin">
+        <img src="/<?=PATH_LOGO?>" alt="" width="190">
+      </a>
+      <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
 
-<div class="col-sm-3 col-md-2 sidebar">
-    
-    <div class="profile-sidebar3">
-
-        <div class="content-profile">
-
-            <!-- SIDEBAR USERPIC -->
-            <div class="profile-userpic">
-                <img src="/<?=$avataThumb;?>" class="img-responsive" alt="">
+      <!-- Navbar Right Menu-->
+      <ul class="app-nav">
+        <li class="app-search">
+          <input class="app-search__input" type="search" placeholder="Search">
+          <button class="app-search__button"><i class="fa fa-search"></i></button>
+        </li>
+        <!--Notification Menu-->
+        <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i class="fa fa-bell-o fa-lg"></i></a>
+          <ul class="app-notification dropdown-menu dropdown-menu-right">
+            <li class="app-notification__title"> Você tem 4 novas notificações.</li>
+            <div class="app-notification__content">
+              <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
+                  <div>
+                    <p class="app-notification__message">Lisa te mandou um mail</p>
+                    <p class="app-notification__meta">Há 2 min</p>
+                  </div></a></li>
+              <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-danger"></i><i class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
+                  <div>
+                    <p class="app-notification__message">Servidor de correio não está funcionando</p>
+                    <p class="app-notification__meta">5 min atrás</p>
+                  </div></a></li>
+              <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-success"></i><i class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
+                  <div>
+                    <p class="app-notification__message">Transação concluída</p>
+                    <p class="app-notification__meta">2 dias atrás</p>
+                  </div></a></li>
+              <div class="app-notification__content">
+                <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-primary"></i><i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span></span>
+                    <div>
+                      <p class="app-notification__message">Lisa te mandou um email</p>
+                      <p class="app-notification__meta">Há 2 min</p>
+                    </div></a></li>
+                <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-danger"></i><i class="fa fa-hdd-o fa-stack-1x fa-inverse"></i></span></span>
+                    <div>
+                      <p class="app-notification__message">Servidor de correio não está funcionando</p>
+                      <p class="app-notification__meta">5 min atrás</p>
+                    </div></a></li>
+                <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-success"></i><i class="fa fa-money fa-stack-1x fa-inverse"></i></span></span>
+                    <div>
+                      <p class="app-notification__message">Transação concluída</p>
+                      <p class="app-notification__meta">2 dias atrás</p>
+                    </div></a></li>
+              </div>
             </div>
-            <!-- END SIDEBAR USERPIC -->
+            <li class="app-notification__footer"><a href="#">Veja todas as notificações.</a></li>
+          </ul>
+        </li>
+        <!-- User Menu-->
+        <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+          <ul class="dropdown-menu settings-menu dropdown-menu-right">
+            <li>
+              <a class="dropdown-item" href="/admin/profile/<?=$authSession->session_user?>"><i class="fa fa-cog fa-lg">  </i> Configurações </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/admin/profile/<?=$authSession->session_user?>"><i class="fa fa-user fa-lg"></i> Perfil </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/auth/logout"><i class="fa fa-sign-out fa-lg"></i> Sair </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </header>
 
-            <!-- SIDEBAR USER TITLE -->
-            <div class="profile-usertitle">
-                <div class="profile-usertitle-name">
-                    <?=$avataName?>
-                </div>
-                <div class="profile-usertitle-job">
-                    <?=$avataCategory?>
-                </div>
-            </div>
-            <!-- END SIDEBAR USER TITLE -->
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
 
-            <!-- SIDEBAR BUTTONS -->
-            <div class="profile-userbuttons">
-                <button type="button" class="btn btn-success btn-sm">Follow</button>
-                <button type="button" class="btn btn-danger btn-sm">Message</button>
-            </div>
-            <!-- END SIDEBAR BUTTONS -->
-
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/<?=$avataThumb?>" width="52" alt="User Image">
+        <div>
+          <p class="app-sidebar__user-name"><?=$avataName?></p>
+          <p class="app-sidebar__user-designation">Frontend Developer</p>
         </div>
+      </div>
 
-        <!-- SIDEBAR MENU -->
-        <div class="profile-usermenu">
-            <hr>
-            <ul class="nav nav-sidebar">
-                <li class="active">
-                    <a href="#">
-                    <i class="glyphicon glyphicon-home"></i>
-                    Overview </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <i class="glyphicon glyphicon-user"></i>
-                    Account Settings </a>
-                </li>
-                <li>
-                    <a href="#" target="_blank">
-                    <i class="glyphicon glyphicon-ok"></i>
-                    Tasks </a>
-                </li>
-                <li>
-                    <a href="#">
-                    <i class="glyphicon glyphicon-flag"></i>
-                    Help </a>
-                </li>
-            </ul>
-        </div>
-        <!-- END MENU -->
-        
-    </div>
+      <ul class="app-menu">
+        <li>
+          <a class="app-menu__item active" href="/admin"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a>
+        </li>
+
+        <!-- CRUD -->
+        <li class="treeview">
+          <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label"> Cadastro </span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li>
+              <a class="treeview-item" href="/admin/user"><i class="icon fa fa-circle-o"></i> User </a>
+            </li>
+          </ul>
+        </li>
 
 
-    <!-- <ul class="nav nav-sidebar">
-        <li class="active">
-            <a href="#">Overview <span class="sr-only">(current)</span></a>
+
+
+        <li class="treeview">
+          <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">UI Elements</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="bootstrap-components.html"><i class="icon fa fa-circle-o"></i> Bootstrap Elements</a></li>
+            <li><a class="treeview-item" href="https://fontawesome.com/v4.7.0/icons/" target="_blank" rel="noopener"><i class="icon fa fa-circle-o"></i> Font Icons</a></li>
+            <li><a class="treeview-item" href="ui-cards.html"><i class="icon fa fa-circle-o"></i> Cards</a></li>
+            <li><a class="treeview-item" href="widgets.html"><i class="icon fa fa-circle-o"></i> Widgets</a></li>
+          </ul>
         </li>
         <li>
-            <a href="#">Reports</a>
+          <a class="app-menu__item" href="charts.html"><i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Charts</span></a>
         </li>
-    </ul>
-    
-    <ul class="nav nav-sidebar">
-        <li><a href="">Nav item</a></li>
-        <li><a href="">Nav item again</a></li>
-        <li><a href="">One more nav</a></li>
-        <li><a href="">Another nav item</a></li>
-        <li><a href="">More navigation</a></li>
-    </ul>
-    
-    <ul class="nav nav-sidebar">
-        <li><a href="">Nav item again</a></li>
-        <li><a href="">One more nav</a></li>
-        <li><a href="">Another nav item</a></li>
-    </ul> -->
-
-</div>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span class="app-menu__label">Forms</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="form-components.html"><i class="icon fa fa-circle-o"></i> Form Components</a></li>
+            <li><a class="treeview-item" href="form-custom.html"><i class="icon fa fa-circle-o"></i> Custom Components</a></li>
+            <li><a class="treeview-item" href="form-samples.html"><i class="icon fa fa-circle-o"></i> Form Samples</a></li>
+            <li><a class="treeview-item" href="form-notifications.html"><i class="icon fa fa-circle-o"></i> Form Notifications</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Tables</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="table-basic.html"><i class="icon fa fa-circle-o"></i> Basic Tables</a></li>
+            <li><a class="treeview-item" href="table-data-table.html"><i class="icon fa fa-circle-o"></i> Data Tables</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-file-text"></i><span class="app-menu__label">Pages</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="blank-page.html"><i class="icon fa fa-circle-o"></i> Blank Page</a></li>
+            <li><a class="treeview-item" href="page-login.html"><i class="icon fa fa-circle-o"></i> Login Page</a></li>
+            <li><a class="treeview-item" href="page-lockscreen.html"><i class="icon fa fa-circle-o"></i> Lockscreen Page</a></li>
+            <li><a class="treeview-item" href="page-user.html"><i class="icon fa fa-circle-o"></i> User Page</a></li>
+            <li><a class="treeview-item" href="page-invoice.html"><i class="icon fa fa-circle-o"></i> Invoice Page</a></li>
+            <li><a class="treeview-item" href="page-calendar.html"><i class="icon fa fa-circle-o"></i> Calendar Page</a></li>
+            <li><a class="treeview-item" href="page-mailbox.html"><i class="icon fa fa-circle-o"></i> Mailbox</a></li>
+            <li><a class="treeview-item" href="page-error.html"><i class="icon fa fa-circle-o"></i> Error Page</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>

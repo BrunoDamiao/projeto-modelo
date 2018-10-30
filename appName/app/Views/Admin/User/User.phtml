@@ -1,90 +1,116 @@
 <?php
-
   $authSession = (object) FwBD\Session\Session::get('Auth');
-  $baseURI  = '/admin/user';
+  $root  = '/admin/user';
   $view     = $this->getData();
   $data     = $view['data'];
   $dataForm = ($view['dataForm'])?? '';
+  // pp($data);
 
-?>  
+?>
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> <?=$this->getTitle()?></h1>
+          <p> <?=APP_SLOGAN?> </p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Cadastro</li>
+          <li class="breadcrumb-item active"><a href="#">Users</a></li>
+        </ul>
+      </div>
 
-<h3 class="sub-header"> List data 
-  <a href="<?=$baseURI;?>/create">
-  <div class="btn btn-primary pull-right">
-    <span class="fa fa-plus-circle" aria-hidden="true"></span> Create new </div> 
-  </a>
-</h3>
+      <div class="row">
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title"> Responsive Table
+              <a href="<?=$root;?>/create" title="Create Registro" alt="Create Registro">
+                <div class="btn btn-info pull-right"> <span class="fa fa-plus-square" aria-hidden="true"></span> Create new </div>
+              </a>
+            </h3>
+            <?php
+              showMessageFlash('primary');
+              showMessageFlash('success');
+              showMessageFlash('info');
+              showMessageFlash('danger');
+              showMessageFlash('warning');
+            ?>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th style="width: 18%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  // pp($data->getResult(),1);
+                  if ( ! $data ) {
+                    echo "<tr>";
+                      echo "<td colspan='7'> <center> <span>Sem Registro</span> </center> </td>";
+                    echo "</tr>";
+                  }
+                  foreach ($data as $k => $user) :
+                    $action    = ($user->user_status)? 'value="1" checked' : 'value="0" ';
+                    $user_id   = ($user->user_id)?? $user->id;
+                    $user_name = ($user->user_name)?? $user->name;
+                    $nameAuthor= ($user->name_author)? $user->name_author : 'masterkey';
 
-  <?php
-    showMessageFlash('primary');
-    showMessageFlash('success');
-    showMessageFlash('info');
-    showMessageFlash('danger');
-    showMessageFlash('warning');
-    // pp($authSession);
-    // pp($data->getResult());
-  ?>
+                    echo "<tr>";
+                      echo "<td> {$user->user_id} </td>";
+                      echo "<td> {$user->user_name} </td>";
+                      echo "<td> <small> {$user->level_category} </small></td>";
+                      echo '<td>';
+                        echo '<small>create '.date('d-m-Y',strtotime($user->user_created));
+                        echo '<br> update '.date('d-m-Y', strtotime($user->user_updated)).'</small>';
+                      echo '</td>';
+                      echo "<td>{$nameAuthor}</td>";
 
-<div class="table-responsive">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Level</th>
-        <th>Date</th>
-        <th>Author</th>
-        <th>Status</th>
-        <th style="width: 20%">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php        
-        
-        if ( ! $data->getResult() ) {
-          echo "<tr>";
-            echo "<td colspan='8'> <center> <span>Sem Registro</span> </center> </td>";
-          echo "</tr>";
-        }
+                      echo "<td>";
+                        echo '<label class="switch">';
+                            echo '<input type="checkbox"
+                              class="sts" '.$action.'
+                              data-model="user/jstatus"
+                              data-id="'.$user_id.'"
+                              data-name="'.$user_name.'">';
+                            echo '<span class="slider round"></span>';
+                        echo '</label>';
+                      echo "</td>";
 
-        foreach ($data->getResult() as $k => $user) :
-          $action    = ($user->user_status)? 'value="1" checked' : 'value="0" ';
-          $user_id   = ($user->user_id)?? $user->id;
-          $user_name = ($user->user_name)?? $user->name;
-          $nameAuthor= ($user->name_author)? $user->name_author : 'masterkey';
-          echo "<tr>";
-            echo "<td>{$user->user_id}</td>";
-            echo "<td>{$user->user_name}</td>";
-            echo "<td> <small>{$user->level_category} - ".strtoupper($user->level_name)."</small></td>";
-            echo '<td>';
-              echo '<small>create '.date('d-m-Y',strtotime($user->user_created));
-              echo '<br> update '.date('d-m-Y', strtotime($user->user_updated)).'</small>';
-            echo '</td>';
-            echo "<td>{$nameAuthor}</td>";
-            
-            echo "<td>";
-              echo '<label class="switch">';
-                  echo '<input type="checkbox" 
-                    class="sts" '.$action.'
-                    data-model="user/jstatus" 
-                    data-id="'.$user_id.'" 
-                    data-name="'.$user_name.'">';
-                  echo '<span class="slider round"></span>';
-              echo '</label>';
-            echo "</td>";
-            
-            echo '<td>';
-              // echo '<a href="'.$baseURI.'/preview/'.$user->user_id.'" class="btn btn-info btn-xs" title="Detalhes do usuário" alt="Detalhes do usuário"> <i class="fas fa-user m-right-xs"></i> View </a> ';
-              echo '<a href="'.$baseURI.'/edit/'.$user->user_id.'" class="btn btn-warning btn-xs" title="Edit Registro" alt="Edit Registro"> <i class="fa fa-edit m-right-xs"></i> Edit </a> ';
-              echo '<a href="'.$baseURI.'/delete/'.$user->user_id.'" class="btn btn-danger btn-xs" title="Delete Registro" alt="Delete Registro"> <i class="fas fa-trash-alt m-right-xs"></i> Delete </a> ';
-            echo '</td>';
+                      echo "<td>";
+                        echo '<a href="'.$root.'/edit/'.$user_id.'" class="btn btn-warning btn-sm" title="Edit Registro" alt="Edit Registro"> <i class="fa fa-pencil-square-o"></i> Edit </a> ';
+                        echo '<a href="'.$root.'/delete/'.$user_id.'" class="btn btn-danger btn-sm" title="Delete Registro" alt="Delete Registro"> <i class="fa fa-trash"></i> Delete </a> ';
+                      echo "</td>";
+                    echo "</tr>";
+                  endforeach;
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
 
-            /*echo '<td><a href=""> <i class="fas fa-image"></i> </a></td>';
-            echo '<td><a href=""> <i class="fas fa-edit"></i> </a></td>';
-            echo '<td><a href=""> <i class="fas fa-trash-alt"></i> </a></td>';*/
-          echo "</tr>";
-        endforeach;
-      ?>
-    </tbody>
-  </table>
-</div>
+
+
+<!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
+  </body>
+</html>
+

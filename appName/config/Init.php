@@ -11,7 +11,7 @@ define('DS', DIRECTORY_SEPARATOR);
  * Set headers systems
  */
 const APP_NAME      = 'Projeto AppName';
-const APP_SLOGAN    = 'FrameWorks Bruno Damião';
+const APP_SLOGAN    = 'Um FrameWorks por Bruno Damião';
 const APP_PAGINATOR = 12;
 
 /**

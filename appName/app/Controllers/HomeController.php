@@ -31,7 +31,9 @@ class HomeController extends BaseController
         public function getIndex()
         {
             $title = 'Home';
-            Container::getView('site.home', compact('title'));
+            // Container::getView('site.home', compact('title'));
+
+            redirect('/auth');
         }
 
         public function getAbout()
