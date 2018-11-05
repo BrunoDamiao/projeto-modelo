@@ -1,15 +1,19 @@
   <footer class="container text-center mt-5">
     <div class="inner">
-    &copy 2018 - <?=APP_NAME?> Todos os direitos reservados.
+    &copy 2018 - <?=APP_TITLE?> Todos os direitos reservados.
     <a href="http://brunodamiao.com.br" target="_blank">by designer Bruno</a>
     <!-- </div> -->
     </footer>
 
 
   <!-- Scripts -->
-    <script src="/assets/jquery.min.js"></script>
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+
+    <!-- <script src="/assets/jquery.min.js"></script>
     <script src="/assets/libs/bootstrap/js/popper.min.js"></script>
-    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.min.js"></script> -->
 
   <script>
   jQuery(function($){
@@ -21,17 +25,60 @@
       $( "#DBDrive" ).prop("value", data);
     });
 
+    $( "#btnCon" ).click(function() {
+      $( "#pnlCon" ).removeClass('d-none').slideDown();
+      $( "#pnlUser" ).slideUp().addClass('d-none');
+      $( "#pnlProject" ).slideUp().addClass('d-none');
+
+      $( "#btnCon" ).removeClass('btn-info');
+      $( "#btnCon" ).addClass('btn-primary');
+
+      $( "#btnUser" ).removeClass('btn-info');
+      $( "#btnUser" ).removeClass('btn-primary');
+
+      $( "#btnProject" ).removeClass('btn-info');
+      $( "#btnProject" ).removeClass('btn-primary');
+
+      $( "#btnUser" ).addClass('btn-secondary');
+      $( "#btnProject" ).addClass('btn-secondary');
+
+      $( "#btnSave" ).removeClass('btn-success');
+      $( "#btnSave" ).addClass('btn-secondary');
+      $( "#btnSave" ).prop("type", "button");
+    });
+
     $( "#btnUser" ).click(function() {
       $( "#pnlUser" ).removeClass('d-none').slideDown();
       $( "#pnlCon" ).slideUp().addClass('d-none');
+      $( "#pnlProject" ).slideUp().addClass('d-none');
 
+      $( "#btnUser" ).removeClass('btn-secondary');
+      $( "#btnUser" ).addClass('btn-primary');
+
+      $( "#btnCon" ).removeClass('btn-info');
+
+      $( "#btnCon" ).addClass('btn-info');
+      $( "#btnProject" ).addClass('btn-info');
+
+      $( "#btnSave" ).removeClass('btn-secondary');
       $( "#btnSave" ).addClass('btn-success');
       $( "#btnSave" ).prop("type", "submit");
     });
 
-    $( "#btnCon" ).click(function() {
-      $( "#pnlCon" ).removeClass('d-none').slideDown();
+    $( "#btnProject" ).click(function() {
+      $( "#pnlProject" ).removeClass('d-none').slideDown();
+      $( "#pnlCon" ).slideUp().addClass('d-none');
       $( "#pnlUser" ).slideUp().addClass('d-none');
+
+      $( "#btnProject" ).removeClass('btn-secondary');
+      $( "#btnProject" ).removeClass('btn-info');
+      $( "#btnProject" ).addClass('btn-primary');
+
+      $( "#btnCon" ).removeClass('btn-primary');
+      $( "#btnUser" ).removeClass('btn-primary');
+
+      $( "#btnCon" ).addClass('btn-info');
+      $( "#btnUser" ).addClass('btn-secondary');
 
       $( "#btnSave" ).removeClass('btn-success');
       $( "#btnSave" ).addClass('btn-secondary');

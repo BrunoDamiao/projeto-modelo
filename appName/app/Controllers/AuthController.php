@@ -11,13 +11,15 @@ use FwBD\Json\Json;
 class AuthController extends BaseController
 {
     private $model;
-
+    private $pTitle;
 
     public function __construct($params)
     {
         parent::__construct($params);
-        // Container::setTemplateView('auth.templates.template');
+        Container::setTemplateView('auth.templates.template');
         $this->model = Container::getServices('App\Models\Auth');
+
+        $this->pTitle = getJsonDBConfig(PATH_DATABASE)['proj_title'];
     }
 
     public function __destruct()
@@ -32,13 +34,17 @@ class AuthController extends BaseController
 
     public function getIndex()
     {
-        $title = 'Auth';
-        Container::getView('auth.auth', compact('title'));
+
+        $title = $this->pTitle . ' - Auth';
+
+        $data  = $this->pTitle;
+
+        Container::getView('auth.auth', compact('title','data'));
     }
 
     public function getCreate()
     {
-        $title = 'Create';
+        $title = $this->pTitle . ' - Create';
         Container::getView('auth.create', compact('title'));
 
         // $this->getView('Cadastra-se Agora!', 'Create');
@@ -47,7 +53,7 @@ class AuthController extends BaseController
 
     public function getForgot()
     {
-        $title = 'Forgot';
+        $title = $this->pTitle . ' - Forgot';
         Container::getView('auth.forgot', compact('title'));
 
         // $this->getView('Esqueceu a Senha?', 'forgot');
@@ -81,7 +87,7 @@ class AuthController extends BaseController
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request')->post();
         // array_pop($request);
-        pp($request);
+        // pp($request,1);
 
         #VALIDATE
         $validate = Container::getServices('FwBD\Validate\Validate','Auth');
@@ -102,6 +108,7 @@ class AuthController extends BaseController
         $request['user_status'] = 1;
 
         $this->model
+            ->setTable('tb_user AS auth')
             ->select('auth.user_id, auth.user_name, auth.user_email, auth.user_password, auth.user_show, auth.user_thumb, auth.user_status, l.level_category, l.level_name')
             ->join('tb_level as l', 'l.level_id = auth.level_id')
             ->where('user_email', $request['user_email'])

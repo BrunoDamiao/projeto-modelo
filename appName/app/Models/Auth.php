@@ -5,14 +5,13 @@ use FwBD\Model\BaseModel;
 
 class Auth extends BaseModel
 {
-    protected $table = 'tb_user as auth';
+    protected $table = 'tb_user';
     protected $preFix = 'user_';
 
     # Fillable
     protected $fillable = [
-        'level_id', 'user_name', 'user_email', 'user_password', 'user_show', 
-        'user_thumb', 'user_obs', 'user_uri', 'user_created', 'user_updated', 
-        'user_status', 'user_author'     
+        'level_id', 'user_name', 'user_email', 'user_password', 'user_show', 'user_thumb',
+        'user_obs', 'user_uri', 'user_created', 'user_updated', 'user_status','user_author'
     ];
 
     # Filters/Rules

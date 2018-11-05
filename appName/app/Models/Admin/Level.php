@@ -15,7 +15,7 @@ class Level extends BaseModel
 
     # Filters/Rules
     protected $rules = [
-        'level_category' => 'requerid | unique:level | min:3 | max:20',
+        'level_category' => 'requerid | unique:level | min:1 | max:20',
         'level_name'     => 'requerid | unique:level | min:3 | max:20',
         /*'level_category' => 'requerid | min:3 | max:20',
         'level_name'     => 'requerid | min:3 | max:20',*/

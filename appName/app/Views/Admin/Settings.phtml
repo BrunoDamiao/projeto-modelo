@@ -1,0 +1,313 @@
+<?php
+  $root  = '/admin/settings';
+  $view = $this->getData();
+  $data = ($view['data'])?? '';
+
+  # Start
+    $msgInit_debug = $data['init']['debug'];
+    $msgInit_key   = $data['init']['key'];
+    $msgInit_root  = $data['init']['root'];
+  # App
+    $msgApp_app      =  $data['app']['app'];
+    $msgApp_title    =  $data['app']['title'];
+    $msgApp_slogan   =  $data['app']['slogan'];
+    $msgApp_name     =  $data['app']['name'];
+    $msgApp_email    =  $data['app']['email'];
+    $msgApp_paginator=  $data['app']['paginator'];
+  # Databases
+    $msgData_drive   =  $data['database']['drive'];
+    $msgData_host    =  $data['database']['host'];
+    $msgData_name    =  $data['database']['dbname'];
+  # Path
+    $msgPath_root    =  $data['path_system']['root'];
+    $msgPath_views   =  $data['path_system']['views'];
+    $msgPath_storage =  $data['path_system']['storage'];
+    $msgPath_database=  $data['path_system']['database'];
+  # Mídias
+    $msgMidias_midias   =  $data['path_midias']['midias'];
+    $msgMidias_favicon  =  $data['path_midias']['favicon'];
+    $msgMidias_logo     =  $data['path_midias']['logo'];
+    $msgMidias_logo2    =  $data['path_midias']['logo2'];
+    $msgMidias_mescle   =  $data['path_midias']['mescle'];
+    $msgMidias_loader   =  $data['path_midias']['loader'];
+    $msgMidias_avatar   =  $data['path_midias']['avatar'];
+
+  $msgAction  = $root;
+  $msgCategory= ($data->level_category) ?? '';
+  // $msgLevel   = (ucfirst($data->level_name)) ?? '';
+  $msgName    = ($data->user_name) ?? '';
+  $msgEmail   = ($data->user_email) ?? '';
+  $msgObs     = ($data->user_obs) ?? '';
+  $msgAuthor  = ($data->name_author) ?? '';
+  $msgShow    = ($data->user_show) ?? '';
+
+  $thumb      = ($data->user_thumb) ?? '';
+  $msgThumb   = '/'.showThumb($thumb,'user');
+
+  $formTitle  = 'Settings';
+  $btnAction  = '<i class="fa fa-fw fa-lg fa-check-circle"></i> Save ';
+  $btnBack = '<i class="fa fa-fw fa-lg fa-times-circle "></i> Voltar';
+
+  function showMsgFlash()
+  {
+    showMessageFlash('primary');
+    showMessageFlash('success');
+    showMessageFlash('info');
+    showMessageFlash('danger');
+    showMessageFlash('warning');
+  }
+?>
+
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> <?=$this->getTitle()?> </h1>
+          <p> <?=APP_SLOGAN?> </p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Configurações</li>
+          <li class="breadcrumb-item"><a href="#"><?=$formTitle?></a></li>
+        </ul>
+      </div>
+
+      <div class="row user">
+        <div class="col-md-3">
+          <div class="tile p-0">
+            <ul class="nav flex-column nav-tabs user-tabs">
+              <li class="nav-item"><a class="nav-link active" href="#user-settings" data-toggle="tab">Settings</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-settings1" data-toggle="tab">Start</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-settings2" data-toggle="tab">App</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-settings3" data-toggle="tab">Databases</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-settings4" data-toggle="tab">System</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-settings5" data-toggle="tab">Mídias</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-content">
+
+            <!-- <form> -->
+              <div class="tab-pane active" id="user-settings">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings start</h4>
+                  <?php
+                    showMsgFlash();
+                  ?>
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <a href="/admin/category" title="Manager category" class="btn btn-primary btn-lg " role="button" aria-pressed="true">System Category</a>
+                      <a href="/admin/level" title="Manager levels" class="btn btn-info btn-lg " role="button" aria-pressed="true">System Levels</a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="user-settings1">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings start</h4>
+                  <?php
+                    showMsgFlash();
+                  ?>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label>Debug</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgInit_debug?>">
+                    </div>
+                    <div class="col-md-8">
+                      <label>Security Key</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgInit_key?>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Root [raíz]</label>
+                    <input class="form-control" readonly type="text" name="user_name" value="<?=$msgInit_root?>" placeholder="Enter Root">
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="user-settings2">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings app</h4>
+                  <?php
+                    showMsgFlash();
+                  ?>
+                  <div class="row mb-3">
+                    <div class="col-md-8">
+                      <label>App</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgApp_app?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label>Paginator</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgApp_paginator?>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Title</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgApp_title?>">
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Slogan</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgApp_slogan?>">
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label>Name (suporte)</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgApp_name?>">
+                    </div>
+                    <div class="col-md-6">
+                      <label>E-mail (suporte)</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgApp_email?>">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="user-settings3">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings databases</h4>
+                  <?php
+                    showMsgFlash();
+                  ?>
+                  <div class="row mb-3">
+                    <div class="col-md-2">
+                      <label>Drive</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgData_drive?>">
+                    </div>
+                    <div class="col-md-5">
+                      <label>Host</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgData_host?>">
+                    </div>
+                    <div class="col-md-5">
+                      <label>Name</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgData_name?>.db">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Path</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgPath_database?>">
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="user-settings4">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings system</h4>
+                  <div class="form-group">
+                    <label class="control-label">Systems [app, bootstrap, config, public, src, storage, vendor]</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgPath_root?>">
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Views</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgPath_views?>">
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Storage</label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgPath_storage?>">
+                  </div>
+                </div>
+              </div>
+              <!-- Mídias -->
+              <div class="tab-pane fade" id="user-settings5">
+                <div class="tile user-settings">
+                  <h4 class="line-head">Settings mídias</h4>
+                  <div class="form-group">
+                    <label class="control-label"> Mídias </label>
+                    <input class="form-control" readonly type="text" name="" value="<?=$msgMidias_midias?>">
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label>Favicon</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_favicon?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label> icon.png </label><br>
+                      <img src="/<?=PATH_FAVICON?>" alt="favicon" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label>Logo</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_logo?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label> logo.png </label><br>
+                      <img src="/<?=PATH_LOGO?>" alt="logo" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label>Logo 02</label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_logo2?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label> logo2.png </label><br>
+                      <img src="/<?=PATH_LOGO2?>" alt="logo 02" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label> Marca d'água </label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_mescle?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label> marca-dagua.gif </label><br>
+                      <img src="/<?=PATH_MESCLE?>" alt="Marca d'água" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label> Loader </label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_loader?>">
+                    </div>
+                    <div class="col-md-4">
+                      <label> loader-face.gif </label><br>
+                      <img src="/<?=PATH_LOADER?>" alt="Loader" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                  <div class="row mb-4">
+                    <div class="col-md-8">
+                      <label> Avatar </label>
+                      <input class="form-control" readonly type="text" value="<?=$msgMidias_avatar?>">
+                    </div>
+                    <div class="col-md-4 ">
+                      <label> No image </label><br>
+                      <img src="/<?=PATH_AVATAR?>" alt="Avatar" width="150" class="img-fluid img-thumbnail bg-secondaryx p-2">
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            <!-- </form> -->
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
+
+    <script type="text/javascript">
+
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<?php
+  $authSession  = (object) FwBD\Session\Session::get('Auth');
+  $avataName    = $authSession->session_user_name;
+  $avataCategory= $authSession->session_category.' '.$authSession->session_level;
+  $avataThumb   = showThumb($authSession->session_user_thumb,'user');
+
+  $root  = '/admin/profile';
+  $view = $this->getData();
+  $data = ($view['data'])?? '';
+  $level = ($view['level'])?? '';
+
+  $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
+  $msgAction  = $root.'/'.$data->user_id;
+
+  $msgCategory= ($data->level_category) ?? '';
+  $msgLevel   = (ucfirst($data->level_name)) ?? '';
+  $msgName    = ($data->user_name) ?? '';
+  $msgEmail   = ($data->user_email) ?? '';
+  $msgObs     = ($data->user_obs) ?? '';
+  $msgAuthor  = ($data->name_author) ?? '';
+  $msgShow    = ($data->user_show) ?? '';
+
+  $thumb      = ($data->user_thumb) ?? '';
+  $msgThumb   = '/'.showThumb($thumb,'user');
+  $btnBack = '<i class="fa fa-fw fa-lg fa-times-circle "></i> Voltar';
+?>
+    <main class="app-content">
+      <div class="row user">
+        <div class="col-md-12">
+          <div class="profile">
+            <div class="info">
+              <!-- <img class="user-img" src="/<?=$avataThumb?>"> -->
+              <img src="<?=$msgThumb;?>" id="avatar" class="user-img"title="<?='Avatar'?>">
+              <h4><?=$msgName?></h4>
+              <p><?=$msgLevel." ( $msgCategory )"?></p>
+            </div>
+            <div class="cover-image"></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="tile p-0">
+            <ul class="nav flex-column nav-tabs user-tabs">
+              <li class="nav-item"><a class="nav-link active" href="#user-settings" data-toggle="tab">Settings</a></li>
+              <!-- <li class="nav-item"><a class="nav-link" href="#user-timeline" data-toggle="tab">Timeline</a></li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-content">
+
+            <div class="tab-pane fade" id="user-settings">
+
+              <div class="timeline-post">
+                <div class="post-media"><a href="#"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg"></a>
+                  <div class="content">
+                    <h5><a href="#">John Doe</a></h5>
+                    <p class="text-muted"><small>2 January at 9:30</small></p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis tion ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <ul class="post-utility">
+                  <li class="likes"><a href="#"><i class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
+                  <li class="shares"><a href="#"><i class="fa fa-fw fa-lg fa-share"></i>Share</a></li>
+                  <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> 5 Comments</li>
+                </ul>
+              </div>
+              <div class="timeline-post">
+                <div class="post-media"><a href="#"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg"></a>
+                  <div class="content">
+                    <h5><a href="#">John Doe</a></h5>
+                    <p class="text-muted"><small>2 January at 9:30</small></p>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis tion ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <ul class="post-utility">
+                  <li class="likes"><a href="#"><i class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
+                  <li class="shares"><a href="#"><i class="fa fa-fw fa-lg fa-share"></i>Share</a></li>
+                  <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> 5 Comments</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div class="tab-pane active" id="user-settings">
+              <div class="tile user-settings">
+                <h4 class="line-head">Settings</h4>
+                <?php
+                  showMessageFlash('primary');
+                  showMessageFlash('success');
+                  showMessageFlash('info');
+                  showMessageFlash('danger');
+                  showMessageFlash('warning');
+                ?>
+                <form action="<?=$msgAction;?>" class="" method="post" enctype="multipart/form-data">
+                  <div class="form-group clearfix">
+                    <?php
+                    foreach ($level as $k => $v) :
+                      if ($msgCategory == $v->level_category) $checked = 'checked';
+                      elseif ($k == 0) $checked = 'checked';
+                      else $checked = '';
+                      echo '<div class="float-left mr-5" >';
+                          echo '<label class="control-label d-block"> '.$v->level_category.' '.$v->level_name.' </label> ';
+                          echo '<label class="switch mx-auto" style="min-widthx: 100px;">';
+                              echo '<input class="form-check-input" type="radio" name="level_id" value="'.$v->level_id.'" '.$checked.'>';
+                              echo '<span class="slider"></span>';
+                          echo '</label>';
+                      echo '</div>';
+                    endforeach;
+                    ?>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <!-- <input type="hidden" name="level_id" value="<?=$msglevel?>" > -->
+                    <input class="form-control" type="text" name="user_name" value="<?=$msgName;?>" placeholder="Enter full name">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label">Email</label>
+                    <input class="form-control" type="email" name="user_email" value="<?=$msgEmail?>" placeholder="Enter email address">
+                  </div>
+
+                  <div class="form-group ">
+                    <label class="control-label">Password</label>
+                    <div class="input-group">
+                        <input type="password" name="user_password" value="<?=$msgShow?>" class="eyePassword form-control" placeholder="Informe a senha">
+                        <span class="input-group-btn ml-2">
+                            <a href="#"
+                                class="btn btn-primary showpass"
+                                title="Visualizar senha" alt="Visualizar senha"
+                                aria-hidden="true"
+                                >
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label">Address</label>
+                    <textarea class="form-control" rows="4" name="user_obs" placeholder="Enter your address"><?=$msgObs; ?></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label">Identity Proof</label>
+                    <input type="file" name="user_thumb" class="form-control" id="getPrevew">
+                  </div>
+
+                  <div class="tile-footer">
+                    <button class="btn btn-primary" type="submit"><?=$btnAction?></button>
+                    &nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-secondary pull-right" href="/admin"><?=$btnBack?></a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
+
+  </body>
+</html>

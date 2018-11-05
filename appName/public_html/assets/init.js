@@ -20,7 +20,7 @@ $(document).ready(function() {
 */
 function init_showpass() {
 
-    var typePass = $('#user_password');
+    var typePass = $('.eyePassword');
     var iconPass = $(".showpass i");
 
     if ( typePass.attr('type') == 'password' ) {
@@ -67,7 +67,6 @@ function init_edit_stats_form(x) {
         var name = $(x).attr('data-name');
         var route= $(x).attr('data-model');
         // var msg  = '<div class="alert alert-success hidden-time alert-dismissable fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Status do registro: <strong>'+name+'</strong>, foi editado com sucesso! </div>';
-        // alert('rota '+route+'/'+id);
         console.log('route: '+ route);
 
         $.ajax({

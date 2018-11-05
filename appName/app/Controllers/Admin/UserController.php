@@ -6,9 +6,10 @@ use FwBD\DI\Container;
 
 class UserController extends BaseController
 {
-    private $model;
-    private $root   = '/admin/user';
-    private $totalPage = APP_PAGINATOR;
+    private $model, $image;
+    private $dbConfig;
+    private $root       = '/admin/user';
+    private $totalPage  = APP_PAGINATOR;
 
 
     public function __construct($params)
@@ -21,6 +22,9 @@ class UserController extends BaseController
         $this->image = Container::getServices('FwBD\BrImage\Image');
         $this->image->setDirModel('user');
         $this->image->setflagMerge(0);
+
+        $getDB = getJsonDBConfig(PATH_DATABASE);
+        $this->dbConfig = ($getDB['drive'] === 'sqlite')? '': $getDB['name'].'.';
     }
 
 
@@ -38,7 +42,7 @@ class UserController extends BaseController
 
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appModelo.tb_user AS A
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$this->dbConfig.'tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
@@ -46,9 +50,8 @@ class UserController extends BaseController
             ->where('U.user_id', $authSession->session_user, '!=')
             ->all()
             ->getResult();
-            // pp($data->getResult(),1);
-            // pp($data,1);
 
+        // pp($data,1);
         Container::getView('admin.user.user', compact('title','data'));
     }
 
@@ -114,57 +117,20 @@ class UserController extends BaseController
                 level_name')
             ->where('level_category', 'MASTERKEY','!=')
             ->where('level_name', '--', '!=')
+            ->orderBy('level_category', 'ASC')
             ->all()
             ->getResult();
 
-        $category = Container::getServices('App\Models\Admin\Level')
-            ->select('level_id, level_category,
-                level_name')
-            ->where('level_category', 'MASTERKEY','!=')
-            ->where('level_name', '--')
-            ->all()
-            ->getResult();
-
-        Container::getView('admin.user.user-new-edit', compact('title','data','level','category'));
-    }
-
-    public function getProfile()
-    {
-        $title = 'Manager Profile';
-        // $data  = $this->model->find( $this->getParams('id') );
-        $data = $this->model
-            ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
-                WHERE A.user_id = U.user_author) AS name_author,
-                L.level_id, L.level_category, L.level_name ')
-            ->join('tb_level AS L','L.level_id = U.level_id' )
-            ->where('U.user_id', $this->getParams('id'))
-            ->all()
-            ->getResult()[0];
-
-        $level = Container::getServices('App\Models\Admin\Level')
-            ->where('level_category', 'MASTERKEY', '!=')
-            ->where('level_name', '--', '!=' )
-            ->all()
-            ->getResult();
-        $category = Container::getServices('App\Models\Admin\Level')
-            ->where('level_category', 'MASTERKEY', '!=')
-            ->where('level_name', '--' )
-            ->all()
-            ->getResult();
-
-        pp($data,1);
-
-        Container::getView('admin.user.user-profile', compact('title','data','level','category'));
+        Container::getView('admin.user.user-new-edit', compact('title','data','level'));
     }
 
     public function getEdit()
     {
         $title = 'Manager Users';
-        // $data  = $this->model->find( $this->getParams('id') );
+
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM appBruno.tb_user AS A
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$this->dbConfig.'tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
@@ -299,7 +265,7 @@ class UserController extends BaseController
         #VALIDATE
         $validate = Container::getServices('FwBD\Validate\Validate','Admin/User');
         $this->model->setRules([
-            'user_name' => 'requerid | min:3 | max:20',
+            'user_name' => 'requerid | min:3 | max:255',
             'user_email' => 'requerid | email | min:2 | max:15',
             'user_password' => 'min:4 | max:12',
         ] );

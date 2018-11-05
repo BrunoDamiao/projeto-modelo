@@ -11,9 +11,9 @@
 
     if ($data) {
         $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
-        $msgId      = ($data->level_id) ?? '';
         $formTitle  = '<h2> Edit Data </h2>';
         $btnClass   = 'btn-warning';
+        $msgId      = ($data->level_id) ?? '';
         $msgCategory= ($data->level_category) ?? '';
         $msgName    = ($data->level_name) ?? '';
         $msgObs     = ($data->level_obs) ?? '';
@@ -22,8 +22,8 @@
         $formTitle  = '<h2> Create Data </h2>';
         $btnAction  = '<i class="fa fa-check m-right-xs"></i> Save';
         $btnClass   = 'btn-success';
-        $msgCategory= getDataInput('level_category')?? '';        
-        $msgName    = getDataInput('level_name')?? '';        
+        $msgCategory= getDataInput('level_category')?? '';
+        $msgName    = getDataInput('level_name')?? '';
         $msgObs     = getDataInput('level_obs')?? '';
         $msgAction  = $baseURI.'/create';
     }
@@ -43,7 +43,7 @@
     // pp($category);
     // pp($msgCategory);
     ?>
-    
+
     <div class="form-group">
         <div class="input-group">
             <select name="level_category" class="form-control">
@@ -57,11 +57,11 @@
                 ?>
             </select>
             <span class="input-group-btn">
-                <a href="#" 
+                <a href="#"
                 data-toggle="modal" data-target="#myModal"
-                title="New create level category" 
+                title="New create level category"
                 class="btn btn-primary btnJslist"
-                > 
+                >
                     <span class="fa fa-plus-circle" aria-hidden="true"></span> </a>
             </span>
         </div>
@@ -86,14 +86,14 @@
 <div id="myModal" class="myModal modal fade" tabindex="-1" role="dialog">
     <?php
         $uriJs = '/admin/level';
-        $mdId = ($data->level_id) ?? ''; 
+        $mdId = ($data->level_id) ?? '';
         $btnModelAction = '<i class="fa fa-check m-right-xs"></i> Save';
     ?>
-    <div class="datamodel" 
-        data-model="level" 
-        data-id="<?=$mdId;?>" 
-        data-routelist="<?=$uriJs?>/listcategory" 
-        data-routesave="<?=$uriJs?>/newcategory" 
+    <div class="datamodel"
+        data-model="level"
+        data-id="<?=$mdId;?>"
+        data-routelist="<?=$uriJs?>/listcategory"
+        data-routesave="<?=$uriJs?>/newcategory"
     </div>
         <!-- data-route="/admin/level/listcategory-level"  -->
 

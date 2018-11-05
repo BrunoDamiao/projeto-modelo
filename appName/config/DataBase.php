@@ -7,11 +7,12 @@
  */
 
 
-$connectionsJson = getJsonDBConfig(PATH_STORAGE . 'database' .DS);
+// $connectionsJson = getJsonDBConfig(PATH_STORAGE . 'database' .DS);
+$connectionsJson = getJsonDBConfig(PATH_DATABASE);
 $connections = [
             'sqlite'    => [
-                            'host'       => PATH_DATABASE . DB_NAME . '.db',
-                            'name'       => DB_NAME . '.db',
+                            'host'       => str_replace(PATH_ROOT,  '', PATH_DATABASE),
+                            'name'       => DB_NAME,
                             'user'       => 'PDO::ATTR_ERRMODE',
                             'password'   => 'PDO::ERRMODE_EXCEPTION',
                             'charset'    => 'PDO::ATTR_DEFAULT_FETCH_MODE',
@@ -28,8 +29,8 @@ $connections = [
                         ],
 
             'oracle'    => [
-                            'ost'        => 'localhost',
-                            'ame'        => DB_NAME,
+                            'host'       => 'localhost',
+                            'name'       => DB_NAME,
                             'user'       => 'root',
                             'password'   => 'beca',
                             'charset'    => 'utf8',
@@ -37,8 +38,8 @@ $connections = [
                         ],
 
             'postgres'  => [
-                            'ost'        => 'localhost',
-                            'ame'        => DB_NAME,
+                            'host'       => 'localhost',
+                            'name'       => DB_NAME,
                             'user'       => 'root',
                             'password'   => 'beca',
                             'charset'    => 'utf8',
@@ -46,8 +47,8 @@ $connections = [
                         ],
 
             'sqlserver'     => [
-                            'ost'        => 'localhost',
-                            'ame'        => DB_NAME,
+                            'host'       => 'localhost',
+                            'name'       => DB_NAME,
                             'user'       => 'root',
                             'password'   => 'beca',
                             'charset'    => 'utf8',

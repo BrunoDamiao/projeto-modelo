@@ -1,11 +1,10 @@
 <?php
   $authSession = (object) FwBD\Session\Session::get('Auth');
-  $root  = '/admin/user';
+  $root     = '/admin/user';
   $view     = $this->getData();
   $data     = $view['data'];
   $dataForm = ($view['dataForm'])?? '';
   // pp($data);
-
 ?>
   <main class="app-content">
       <div class="app-title">
@@ -66,7 +65,7 @@
                     echo "<tr>";
                       echo "<td> {$user->user_id} </td>";
                       echo "<td> {$user->user_name} </td>";
-                      echo "<td> <small> {$user->level_category} </small></td>";
+                      echo "<td> {$user->level_name} <small> ( {$user->level_category} ) </small></td>";
                       echo '<td>';
                         echo '<small>create '.date('d-m-Y',strtotime($user->user_created));
                         echo '<br> update '.date('d-m-Y', strtotime($user->user_updated)).'</small>';

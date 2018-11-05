@@ -1,19 +1,19 @@
-    <footer class="mastfoot mt-auto">
-      <div class="inner">
-        &copy 2018 - <?=APP_NAME?> Todos os direitos reservados.
-        <a href="http://brunodamiao.com.br" target="_blank">by designer Bruno</a>
-      </div>
-    </footer>
-
-  </div>
 
 
 
-
-  <!-- Scripts -->
-  <script src="/assets/jquery.min.js"></script>
-  <!-- <script src="<?=$uriAssets;?>/js/init.js"></script> -->
-  <!-- <script src="<?=$uriAssets;?>/js/init.js"></script> -->
-
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <script type="text/javascript">
+      // Login Page Flipbox control
+      $('.login-content [data-toggle="flip"]').click(function() {
+        $('.login-box').toggleClass('flipped');
+        return false;
+      });
+    </script>
   </body>
 </html>

@@ -1,31 +1,13 @@
 <?php
 
+  $view     = $this->getData();
 	$baseURI  = '/auth';
 
 	$msgEmail = getDataInput('user_email') ?? '';
-  	$msgSenha = getDataInput('user_password') ?? '';
+  $msgSenha = getDataInput('user_password') ?? '';
 
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Sistema desinvolvido por Bruno Damião - theme Vali.">
-
-	<link rel="icon" href="/<?=PATH_FAVICON?>">
-    <title><?=APP_NAME?> - <?=$this->getTitle();?></title>
-
-    <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/theme/css/main.css">
-
-    <!-- Font-icon css-->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
-
-  <body>
     <section class="material-half-bg">
       <div class="cover"></div>
     </section>
@@ -33,7 +15,7 @@
     <section class="login-content">
 
       <div class="logo">
-        <h1> AppModelo </h1>
+        <h1> <?=$view['data']?> </h1>
         <!-- <h1><img src="/<?//=PATH_LOGO?>" alt="" width="190"></h1> -->
       </div>
 
@@ -41,12 +23,12 @@
         <form class="login-form" action="/auth/login" method="post">
           <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>SIGN IN</h3>
           <?php
-			showMessageFlash('primary');
-			showMessageFlash('success');
-			showMessageFlash('info');
-			showMessageFlash('warning');
-			showMessageFlash('danger');
-		  ?>
+    			showMessageFlash('primary');
+    			showMessageFlash('success');
+    			showMessageFlash('info');
+    			showMessageFlash('warning');
+    			showMessageFlash('danger');
+    		  ?>
           <div class="form-group">
             <label class="control-label">USERNAME</label>
             <input class="form-control" name="user_email" type="text" placeholder="Email" autofocus>
@@ -95,22 +77,3 @@
     </section>
 
 
-
-
-
-    <!-- Essential javascripts for application to work-->
-    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
-    <script src="/assets/theme/js/popper.min.js"></script>
-    <script src="/assets/theme/js/bootstrap.min.js"></script>
-    <script src="/assets/theme/js/main.js"></script>
-    <!-- The javascript plugin to display page loading on top-->
-    <script src="/assets/theme/js/plugins/pace.min.js"></script>
-    <script type="text/javascript">
-      // Login Page Flipbox control
-      $('.login-content [data-toggle="flip"]').click(function() {
-      	$('.login-box').toggleClass('flipped');
-      	return false;
-      });
-    </script>
-  </body>
-</html>

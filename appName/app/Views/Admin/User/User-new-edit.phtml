@@ -2,6 +2,7 @@
   $root  = '/admin/user';
   $view = $this->getData();
   $data = ($view['data'])?? '';
+  $level = ($view['level'])?? '';
 
   if ($data) {
     $formTitle  = 'Edit';
@@ -9,6 +10,8 @@
     $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
     $msgId      = ($data->user_id) ?? '';
     $msglevel   = ($data->level_id) ?? '1';
+    $msgCategory= ($data->level_category) ?? '';
+    $msgCatName = ($data->level_name) ?? '';
     $msgName    = ($data->user_name) ?? '';
     $msgEmail   = ($data->user_email) ?? '';
     $msgObs     = ($data->user_obs) ?? '';
@@ -20,6 +23,7 @@
     $msgAction  = $root.'/create';
     $btnAction  = '<i class="fa fa-fw fa-lg fa-check-circle"></i>Register';
     $msglevel   = getDataInput('level_id')?? '1';
+    $msgCategory= getDataInput('level_category')?? '';
     $msgName    = getDataInput('user_name')?? '';
     $msgEmail   = getDataInput('user_email')?? '';
     $msgObs     = getDataInput('user_obs')?? 'informe obs';
@@ -71,12 +75,36 @@
               showMessageFlash('info');
               showMessageFlash('danger');
               showMessageFlash('warning');
-              ?>
+            ?>
             <form action="<?=$msgAction;?>" class="" method="post" enctype="multipart/form-data">
               <div class="tile-body">
+                <div class="form-group clearfix">
+                  <?php
+                  $levelx = [
+                      '0'=> (object) ['level_id' => '1','level_category' => 'CATEGORY 01'],
+                      '1'=> (object) ['level_id' => '2','level_category' => '02'],
+                      '2'=> (object) ['level_id' => '3','level_category' => 'CAT'],
+                  ];
+                  // pp("$msglevel - $msgCategory - $msgCatName");
+                  // pp($data);
+                  // pp($level);
+                  foreach ($level as $k => $v) :
+                      if ($msglevel == $v->level_id) $checked = 'checked';
+                      elseif ($k == 0) $checked = 'checked';
+                      else $checked = '';
+                      echo '<div class="float-left mr-5" >';
+                          echo '<label class="control-label d-block"> '.ucfirst($v->level_name).' <small>( '.$v->level_category.' )</small> </label> ';
+                          echo '<label class="switch mx-auto" style="min-widthx: 100px;">';
+                              echo '<input class="form-check-input" type="radio" name="level_id" value="'.$v->level_id.'" '.$checked.'>';
+                              echo '<span class="slider"></span>';
+                          echo '</label>';
+                      echo '</div>';
+                  endforeach;
+                  ?>
+                </div>
                 <div class="form-group">
                   <label class="control-label">Name</label>
-                  <input type="hidden" name="level_id" value="<?=$msglevel?>" >
+                  <!-- <input type="hidden" name="level_id" value="<?=$msglevel?>" > -->
                   <input class="form-control" type="text" name="user_name" value="<?=$msgName;?>" placeholder="Enter full name">
                 </div>
                 <div class="form-group">
@@ -87,8 +115,8 @@
                 <div class="form-group ">
                     <label class="control-label">Password</label>
                     <div class="input-group">
-                        <input type="password" id="user_password" name="user_password" value="<?=$msgShow?>" class="form-control" placeholder="Informe a senha">
-                        <span class="input-group-btn">
+                        <input type="password" name="user_password" value="<?=$msgShow?>" class="eyePassword form-control" placeholder="Informe a senha">
+                        <span class="input-group-btn ml-2">
                             <a href="#"
                                 class="btn btn-primary showpass"
                                 title="Visualizar senha" alt="Visualizar senha"
@@ -109,14 +137,6 @@
                   <label class="control-label">Identity Proof</label>
                   <input type="file" name="user_thumb" class="form-control" id="getPrevew">
                 </div>
-
-                <!-- <div class="form-group">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox">I accept the terms and conditions
-                    </label>
-                  </div>
-                </div> -->
 
               </div>
               <div class="tile-footer">

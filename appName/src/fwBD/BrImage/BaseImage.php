@@ -5,7 +5,7 @@ namespace FwBD\BrImage;
 
 Abstract class BaseImage
 {
-	
+
 	protected $dirRaiz;
 	protected $dirModel;
 	// protected $dirMerge=[];
@@ -27,7 +27,7 @@ Abstract class BaseImage
     // abstract protected function setNameImage();
     // abstract protected function setSizeImage();
     // abstract protected function setMergeImage();
-    
+
     // abstract protected function moveImage();
     // abstract protected function deleteImage();
 
@@ -40,14 +40,14 @@ Abstract class BaseImage
 		$this->createDirectory($this->dirRaiz);
 		# Create pasta model se existir
 		$this->createDirectory($this->dirRaiz.$this->dirModel);
-		
+
 		# Set IMAGENS na variavel $images
 		$this->image = $image;
 		# Set as dimensões da images
 		$this->setSizeImage();
 		# Set new name images
 		$this->setNameImage($image['name']);
-		
+
 	}
 	public function getImage()
 	{
@@ -113,7 +113,7 @@ Abstract class BaseImage
 
 			if ( !empty($sizeThumb) )
 				$this->sizeImage['cfresizeTmb'] = $sizeThumb;
-		
+
 		if ( isset($this->image['tmp_name']) )
 			$this->createResizeImage();
 
@@ -127,7 +127,7 @@ Abstract class BaseImage
 
 	public function setPathMerge($path)
 	{
-		
+
 		# Valida se a logo existe e o dir é valido!
         if ( !is_file($path) && !file_exists($path) ){
         	$this->msgError = "Error, arquivo (logo/marca d'água) não existe! ".$path;
@@ -214,7 +214,7 @@ Abstract class BaseImage
 
 	public function deleteImage($image)
 	{
-		
+
 		$dnsImage = $this->dirRaiz.$this->dirModel.$image;
 		$dnsThumb = $this->dirRaiz.$this->dirModel.'thumb/'.$image;
 
@@ -246,7 +246,7 @@ Abstract class BaseImage
 	private function createDirectory($directory)
 	{
 		if ( !is_dir($directory) && !file_exists($directory) )
-			if ( !mkdir($directory, 0666) )
+			if ( !mkdir($directory, 0755) ) # [0666 - 0677 - 0777]
 				$this->msgError = 'Fails is create dir '.$directory;
 	}
 
@@ -260,7 +260,7 @@ Abstract class BaseImage
     }
 
     private function getSizeImageDefault(string $dim)
-    {	
+    {
     	if ( empty($this->image) )
 			return $this->msgError = 'File empty image!';
 
@@ -278,7 +278,7 @@ Abstract class BaseImage
 		# definindo os dimensão w e h
 		$w = $size;
 		$h = $w;
-		
+
 		# recuperando size original da imagem
 		$wsize = $this->getSizeImageDefault('w');
 		$hsize = $this->getSizeImageDefault('h');
@@ -296,7 +296,7 @@ Abstract class BaseImage
 	}
 
 	private function createResizeImage()
-	{		
+	{
 		# get size original
 		$w = $this->getSizeImageDefault('w');
 		$h = $this->getSizeImageDefault('h');
@@ -344,7 +344,7 @@ Abstract class BaseImage
     # Imprime a imagem final no diretorio escolhido
     private function outputImage($dist, $src, $image='', $quality='80')
     {
-    	
+
     	$image = empty($image)? $this->image['tmp_name'] : $image;
 
         switch($this->mime($image)){
@@ -357,7 +357,7 @@ Abstract class BaseImage
 
     }
 
-    
+
 	private function createMoveImage($flgTmb='')
 	{
 		if ( empty($this->image) )
@@ -382,7 +382,7 @@ Abstract class BaseImage
 		$generateImage = $this->createImages($this->image['tmp_name']);
 		// $generateImage = imagecreatefrompng($this->image['tmp_name']);
 
-		# Resize: copia e redimensiona a image        
+		# Resize: copia e redimensiona a image
         imagecopyresampled(
         	$createImage,
         	$generateImage, 0, 0, 0, 0,
@@ -390,9 +390,9 @@ Abstract class BaseImage
         );
 
         # add marca D'água (setMergeImage())
-        if ( $this->flagMerge == 1 && $flgTmb == 1 && isset($this->mergeImage['flagMergeThumb']) ) 
+        if ( $this->flagMerge == 1 && $flgTmb == 1 && isset($this->mergeImage['flagMergeThumb']) )
         	$this->createMergeThumb($createImage);
-        
+
         if ( $this->flagMerge == 1 && empty($flgTmb) )
         	$this->createMergeImage($createImage);
 
@@ -402,14 +402,14 @@ Abstract class BaseImage
         	$this->createDirectory($directoryThumb);
         }else
         	$directoryThumb = $this->dirRaiz.$this->dirModel;
-        	
+
         $createName = $directoryThumb.$this->getNameImage();
 
         /*pp($directoryThumb);
         pp($createName,1);*/
 
         $this->outputImage($createImage, $createName);
-        
+
         # destroy as possiveis imgs
         imagedestroy($createImage);
         imagedestroy($generateImage);
@@ -438,7 +438,7 @@ Abstract class BaseImage
 
 		# recuperando as dimensões da imagem marca d'água
 		list($wlogo, $hlogo) = getimagesize( $this->mergeImage['pathMerge'] );
-        
+
         # Seta os eixos x e y da logo;
         $position = $dataConfig['position'];
         $margin = $dataConfig['margin'];
@@ -507,7 +507,7 @@ Abstract class BaseImage
 
 		# recuperando as dimensões da imagem marca d'água
 		list($wlogo, $hlogo) = getimagesize( $this->mergeImage['pathMergeThumb'] );
-		
+
         # Seta os eixos x e y da logo;
         $position = $dataConfig['position'];
         $margin = $dataConfig['margin'];
@@ -554,7 +554,7 @@ Abstract class BaseImage
         ];
 
 	}
-	
+
 	private function createMergeImage($createImage)
 	{
 
@@ -605,6 +605,6 @@ Abstract class BaseImage
 
 	}
 
-	
+
 
 }

@@ -1,0 +1,122 @@
+<?php
+  $authSession = (object) FwBD\Session\Session::get('Auth');
+  $root  = '/admin/level';
+  $view     = $this->getData();
+  $data     = $view['data'];
+  $dataForm = ($view['dataForm'])?? '';
+  // pp($data);
+
+?>
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> <?=$this->getTitle()?></h1>
+          <p> <?=APP_SLOGAN?> </p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Configurações</li>
+          <li class="breadcrumb-item"><a href="/admin/settings">Settings</a></li>
+          <li class="breadcrumb-item active"><a href="#">Level</a></li>
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title"> Responsive Table
+              <a href="/admin/category/create" title="Create Registro" alt="Create Registro">
+                <div class="btn btn-secondary pull-right ml-1"> <span class="fa fa-plus-square" aria-hidden="true"></span> Category </div>
+              </a>
+              <a href="<?=$root;?>/create" title="Create Registro" alt="Create Registro">
+                <div class="btn btn-info pull-right"> <span class="fa fa-plus-square" aria-hidden="true"></span> Create new </div>
+              </a>
+            </h3>
+            <?php
+              showMessageFlash('primary');
+              showMessageFlash('success');
+              showMessageFlash('info');
+              showMessageFlash('danger');
+              showMessageFlash('warning');
+              // pp($data);
+              // pp($data->getResult());
+              // pp($dataForm);
+            ?>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th style="width: 18%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  // pp($data->getResult(),1);
+                  if ( ! $data ) {
+                    echo "<tr>";
+                      echo "<td colspan='7'> <center> <span>Sem Registro</span> </center> </td>";
+                    echo "</tr>";
+                  }
+                  foreach ($data as $k => $level) :
+                    $action     = ($level->level_status)? 'value="1" checked':'value="0" ';
+                    $level_id   = ($level->level_id)?? $level->id;
+                    $level_name = ($level->level_name)?? $level->name;
+
+                    echo "<tr>";
+                      echo "<td> {$level->level_id} </td>";
+                      echo "<td> {$level->level_name} </td>";
+                      echo "<td> <small> {$level->level_category} </small></td>";
+                      echo '<td>';
+                        echo '<small>create '.date('d-m-Y',strtotime($level->level_created));
+                        echo '<br> update '.date('d-m-Y', strtotime($level->level_updated)).'</small>';
+                      echo '</td>';
+                      echo "<td>{$level->user_name}</td>";
+
+                      echo "<td>";
+                        echo '<label class="switch">';
+                            echo '<input type="checkbox"
+                              class="sts" '.$action.'
+                              data-model="level/jstatus"
+                              data-id="'.$level_id.'"
+                              data-name="'.$level_name.'">';
+                            echo '<span class="slider round"></span>';
+                        echo '</label>';
+                      echo "</td>";
+
+                      echo "<td>";
+                        echo '<a href="'.$root.'/edit/'.$level_id.'" class="btn btn-warning btn-sm" title="Edit Registro" alt="Edit Registro"> <i class="fa fa-pencil-square-o"></i> Edit </a> ';
+                        echo '<a href="'.$root.'/delete/'.$level_id.'" class="btn btn-danger btn-sm" title="Delete Registro" alt="Delete Registro"> <i class="fa fa-trash"></i> Delete </a> ';
+                      echo "</td>";
+                    echo "</tr>";
+                  endforeach;
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+
+
+
+<!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
+  </body>
+</html>
+

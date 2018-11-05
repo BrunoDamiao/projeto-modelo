@@ -3,22 +3,29 @@
  * Set init systems
  */
 define('APP_DEBUG', true);
-define('APP_KEY', '@AppFwBd$2018%');
+define('APP_KEY', '@AppName$2018%');
 define('APP_ROOT', $_SERVER['DOCUMENT_ROOT']);
 define('DS', DIRECTORY_SEPARATOR);
 
 /**
  * Set headers systems
  */
-const APP_NAME      = 'Projeto AppName';
+const APP_TYPE      = 'CMS';
+const APP_TITLE     = 'Projeto AppName';
 const APP_SLOGAN    = 'Um FrameWorks por Bruno Damião';
 const APP_PAGINATOR = 12;
+/**
+ * Set suport
+ */
+const SP_LEVEL     = 'admin';
+const SP_NAME      = 'Bruno Damião';
+const SP_EMAIL     = 'brunodamiao13@gmail.com';
+const SP_PASS      = 'suporte';
 
 /**
  * Set database systems
  */
 const DB_NAME       = 'appModelo';
-// const APP_DBNAME    = 'appBruno';
 
 /**
  * Set absolute path in the system;

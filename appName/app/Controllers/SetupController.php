@@ -19,7 +19,30 @@ class SetupController extends BaseController
 
         Container::setFilter(['SetupOut']);
         Container::setTemplateView('setup.templates.template');
-        $this->config = DB_CONNECTIONS; //(DB_CONFIG)?? $connections;
+        // $this->config = DB_CONNECTIONS; //(DB_CONFIG)?? $connections;
+        // pp(DB_CONNECTIONS,1);
+
+        $configDefault = [
+            'dbasesDefault'     => DB_CONNECTIONS,
+            'userDefault'       => [
+                'level_id'      => '3',
+                'level_name'    => 'Admin',
+                'user_name'     => SP_NAME,
+                'user_email'    => SP_EMAIL,
+                'user_password' => SP_PASS
+            ],
+            'projectDefault'    => [
+                'proj_type'     => APP_TYPE,
+                'proj_key'      => APP_KEY,
+                'proj_title'    => APP_TITLE,
+                'proj_slogn'    => APP_SLOGAN,
+                'proj_midias'   => PATH_MIDIAS,
+                'proj_paginator'=> APP_PAGINATOR,
+            ],
+        ];
+
+        $this->config = $configDefault;
+        // pp($this->config,1);
     }
 
 
@@ -31,8 +54,9 @@ class SetupController extends BaseController
     {
         $title = 'Settings DataBase';
         $data = $this->config;
+        // pp($data,1);
 
-        Container::getView('setup.settings', compact('title','data'));
+        Container::getView('setup.setup', compact('title','data'));
     }
 
 
@@ -51,7 +75,7 @@ class SetupController extends BaseController
             // pp($rs);
 
             $data = $this->getDataForm($rs);
-            // pp($data);
+            // pp($data,1);
 
             # Validate datas forms
             $validate = new \FwBD\Validate\Validate;
@@ -71,18 +95,18 @@ class SetupController extends BaseController
                 if ($validate->getStatus()) {
                     setDataInput($data);
                     setMsgFlash('warning', $validate->getMessages());
-                    return redirect("/settings");
+                    return redirect("/setup");
                 }
-            // pp($data);
+            // pp($data,1);
 
             # Monta string path do arquivo.json (file conexão com db)
             if ( $data['drive'] === 'sqlite' ) {
-                $jshost       = substr_replace($rs['sqlite_host'], '', strlen(PATH_DATABASE));
-                $jsname       = explode('.', $rs['sqlite_name']);
-                $data['host'] = $jshost . $jsname[0] . '.db';
-                $path         = $jshost . $jsname[0] . '.json';
+                $host         = PATH_ROOT . $this->cleanName($rs['sqlite_host']);
+                $name         = $this->cleanName($rs['sqlite_name']);
+                $data['host'] = $host . $name . '.db';
+                $path         = $host . $name . '.json';
             }else{
-                $path = PATH_DATABASE . $rs['mysql_name'] . '.json';
+                $path = PATH_DATABASE . $this->cleanName($data['name']) . '.json';
             }
             // pp($data);
             // pp($path,1);
@@ -101,6 +125,7 @@ class SetupController extends BaseController
             if ( !\FwBD\Json\Json::createJson($data, $path) ) {
                 setMsgFlash('warning', 'Error! Não foi possível criar o file [fileConDB.json] de configuração do database.');
                 return redirect('/setup');
+                exit();
             }
 
             setMsgFlash('success', 'Parabéns! A conexão com database foi criado com sucesso.');
@@ -123,7 +148,7 @@ class SetupController extends BaseController
             if ( $rs['DBDrive'] === 'sqlite-tab' ) {
                 $dt['drive']    = 'sqlite';
                 $dt['host']     = $rs['sqlite_host'];
-                $dt['name']     = $rs['sqlite_name'];
+                $dt['name']     = $this->cleanName($rs['sqlite_name']);
                 $dt['user']     = $rs['sqlite_attr1'];
                 $dt['password'] = $rs['sqlite_attr2'];
                 $dt['charset']  = $rs['sqlite_attr3'];
@@ -131,16 +156,25 @@ class SetupController extends BaseController
             }elseif ( $rs['DBDrive'] === 'mysql-tab' ) {
                 $dt['drive']    = 'mysql';
                 $dt['host']     = $rs['mysql_host'];
-                $dt['name']     = $rs['mysql_name'];
+                $dt['name']     = $this->cleanName($rs['mysql_name']);
                 $dt['user']     = $rs['mysql_user'];
                 $dt['password'] = $rs['mysql_password'];
                 $dt['charset']  = $rs['mysql_charset'];
                 $dt['collation']= $rs['mysql_collation'];
             }
 
-            $dt['user_name'] = $rs['user_name'];
-            $dt['user_email'] = $rs['user_email'];
+            $dt['level_id']      = $rs['level_id'];
+            $dt['level_name']    = $rs['level_name'];
+            $dt['user_name']     = $rs['user_name'];
+            $dt['user_email']    = $rs['user_email'];
             $dt['user_password'] = $rs['user_password'];
+
+            $dt['proj_category']= $rs['proj_category'];
+            $dt['proj_key']     = $rs['proj_key'];
+            $dt['proj_title']   = $rs['proj_title'];
+            $dt['proj_slogan']  = $rs['proj_slogan'];
+            $dt['proj_midias']  = $rs['proj_midias'];
+            $dt['proj_paginator'] = $rs['proj_paginator'];
 
             return $dt;
         }
@@ -159,17 +193,21 @@ class SetupController extends BaseController
 
         private function execScript(array $config)
         {
-            if ( $config['drive'] === 'sqlite' ) {
+            $pdo = $this->getConPDO($config);
+
+            if ( $config['drive'] === 'sqlite' ) :
                 $script  = $this->sqlTableSqlite($config['name']);
-                $script .= $this->sqlInsertSqlite($config);
-            }
-            if ( $config['drive'] === 'mysql' ) {
+                // $script .= $this->sqlInsertSqlite($config);
+            endif;
+
+            if ( $config['drive'] === 'mysql' ) :
                 $script  = $this->sqlTableMysql($config['name']);
-                $script .= $this->sqlInsertMysql($config);
-            }
+                // $script .= $this->sqlInsertMysql($config);
+            endif;
+
+            $script .= $this->sqlInsertData($config);
 
             try {
-                $pdo = $this->getConPDO($config);
                 $pdo->beginTransaction();
                     $pdo->exec($script);
                 $pdo->commit();
@@ -182,7 +220,35 @@ class SetupController extends BaseController
         }
 
 
+        /**
+         * Script Create table e Insert Datas Mysql
+         */
+        private function sqlInsertData(array $datas)
+        {
+            $data     = $datas;
+            $db       = $data['name'];
+            $pfxModel = ($data['drive'] === 'sqlite')? null : "`{$db}`.";
+            $data['user_show']     = $datas['user_password'];
+            $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
+            $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
 
+            # Create Category MASTERKEY:1
+            $SCRIPT = "INSERT INTO {$pfxModel}`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";
+
+                # Create Category CMS:2
+                $SCRIPT .= "INSERT INTO {$pfxModel}`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '--', 'Category systems ".$data['proj_category']." (primary)', '".cleanString($data['proj_category'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+                    # Create Level CMS:3
+                    $SCRIPT .= "INSERT INTO {$pfxModel}`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '".$data['level_name']."', 'Level systems ".cleanString($data['proj_category'])." (primary)', '".$data['proj_category']."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+            # Create User MASTERKEY:1
+            $SCRIPT .= "INSERT INTO {$pfxModel}`tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ('1', 'masterkey', 'name@masterkey.com', '".$passMaster."', 'masterkey', '', 'User systems (masterkey)', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0'); ";
+
+            # Create User CMS:2
+            $SCRIPT .= "INSERT INTO {$pfxModel}`tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ( '".$data['level_id']."', '".$data['user_name']."', '".$data['user_email']."', '".$data['user_password']."', '".$data['user_show']."', '', 'User systems ".$data['user_name']." (primary)', '".cleanString($data['user_name'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1'); ";
+
+            return $SCRIPT;
+        }
 
         /**
          * Script Create table e Insert Datas Mysql
@@ -194,12 +260,22 @@ class SetupController extends BaseController
             #HASH SENHA
             $data['user_show'] = $datas['user_password'];
             $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
+            $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
 
-            // $SCRIPT = $this->sqlTableMysql($db);
-
+            # Create Category MASTERKEY:1
             $SCRIPT = "INSERT INTO `{$db}`.`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";
 
-            $SCRIPT .= "INSERT INTO `{$db}`.`tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ('1', '".$data['user_name']."', '".$data['user_email']."', '".$data['user_password']."', 'masterkey', '', 'obs masterkey', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0'); ";
+                # Create Category CMS:2
+                $SCRIPT .= "INSERT INTO `{$db}`.`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '--', 'Category systems ".$data['proj_category']." (primary)', '".cleanString($data['proj_category'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+                    # Create Level CMS:3
+                    $SCRIPT .= "INSERT INTO `{$db}`.`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '".$data['level_name']."', 'Level systems ".cleanString($data['proj_category'])." (primary)', '".$data['proj_category']."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+            # Create User MASTERKEY:1
+            $SCRIPT .= "INSERT INTO `{$db}`.`tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ('1', 'masterkey', 'name@masterkey.com', '".$passMaster."', 'masterkey', '', 'User systems (masterkey)', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0'); ";
+
+            # Create User CMS:2
+            $SCRIPT .= "INSERT INTO `{$db}`.`tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ( '".$data['level_id']."', '".$data['user_name']."', '".$data['user_email']."', '".$data['user_password']."', '".$data['user_show']."', '', 'User systems ".$data['user_name']." (primary)', '".cleanString($data['user_name'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1'); ";
 
             return $SCRIPT;
         }
@@ -261,14 +337,26 @@ class SetupController extends BaseController
         private function sqlInsertSqlite(array $datas)
         {
             $data   = $datas;
-            $db     = $data['name'];
-            #HASH SENHA
-            $data['user_show'] = $datas['user_password'];
-            $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
+                $db     = $data['name'];
+                #HASH SENHA
+                $data['user_show'] = $datas['user_password'];
+                $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
+                $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
 
+            # Create Category MASTERKEY:1
             $SCRIPT = "INSERT INTO `tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";
 
-            $SCRIPT .= "INSERT INTO `tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ('1', '".$data['user_name']."', '".$data['user_email']."', '".$data['user_password']."', 'masterkey', '', 'obs masterkey', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0'); ";
+                # Create Category CMS:2
+                $SCRIPT .= "INSERT INTO `tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '--', 'Category systems ".$data['proj_category']." (primary)', '".cleanString($data['proj_category'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+                    # Create Level CMS:3
+                    $SCRIPT .= "INSERT INTO `tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ( '".$data['proj_category']."', '".$data['level_name']."', 'Level systems ".cleanString($data['proj_category'])." (primary)', '".$data['proj_category']."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1');";
+
+            # Create User MASTERKEY:1
+            $SCRIPT .= "INSERT INTO `tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ('1', 'masterkey', 'name@masterkey.com', '".$passMaster."', 'masterkey', '', 'User systems (masterkey)', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0'); ";
+
+            # Create User CMS:2
+            $SCRIPT .= "INSERT INTO `tb_user` (`level_id`, `user_name`, `user_email`, `user_password`, `user_show`, `user_thumb`, `user_obs`, `user_uri`, `user_created`, `user_updated`, `user_status`, `user_author`) VALUES ( '".$data['level_id']."', '".$data['user_name']."', '".$data['user_email']."', '".$data['user_password']."', '".$data['user_show']."', '', 'User systems ".$data['user_name']." (primary)', '".cleanString($data['user_name'])."', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '1'); ";
 
             return $SCRIPT;
         }
@@ -287,6 +375,22 @@ class SetupController extends BaseController
                     CREATE TABLE IF NOT EXISTS tb_user ( user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, level_id INTEGER NOT NULL, user_name TEXT NOT NULL, user_email TEXT NOT NULL, user_password TEXT NOT NULL, user_show TEXT, user_thumb TEXT, user_obs TEXT, user_uri TEXT NOT NULL, user_created TEXT, user_updated TEXT, user_status INTEGER(3) DEFAULT 1, user_author INTEGER(3) DEFAULT 1, FOREIGN KEY (level_id) REFERENCES tb_level(level_id) ON UPDATE CASCADE ON DELETE CASCADE);
                 ';
             return $SCRIPT;
+        }
+
+        private function cleanName($string)
+        {
+            if ( is_numeric($string) )
+                return $string;
+
+            $a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜüÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ"!@#$%&*()_-+={[}]?;:.,\\\'<>°ºª';
+            $b = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr                                 ';
+            $string = utf8_decode($string);
+            $string = strtr($string, utf8_decode($a), $b);
+            $string = strip_tags(trim($string));
+            $string = str_replace(" ","-",$string);
+            $string = str_replace(array("-----","----","---","--"),"-",$string);
+            return utf8_encode($string);
+
         }
 
 

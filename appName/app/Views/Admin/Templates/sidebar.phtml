@@ -1,6 +1,7 @@
 <?php
   $avataName     = $authSession->session_user_name;
-  $avataCategory = $authSession->session_category.' '.$authSession->session_level;
+  $avataCategory = ucfirst($authSession->session_level).
+  " ( $authSession->session_category )";
   $avataThumb    = showThumb($authSession->session_user_thumb,'user');
 ?>
 
@@ -63,7 +64,7 @@
         <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
           <ul class="dropdown-menu settings-menu dropdown-menu-right">
             <li>
-              <a class="dropdown-item" href="/admin/profile/<?=$authSession->session_user?>"><i class="fa fa-cog fa-lg">  </i> Configurações </a>
+              <a class="dropdown-item" href="/admin/settings"><i class="fa fa-cog fa-lg">  </i> Configurações </a>
             </li>
             <li>
               <a class="dropdown-item" href="/admin/profile/<?=$authSession->session_user?>"><i class="fa fa-user fa-lg"></i> Perfil </a>
@@ -83,7 +84,7 @@
       <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/<?=$avataThumb?>" width="52" alt="User Image">
         <div>
           <p class="app-sidebar__user-name"><?=$avataName?></p>
-          <p class="app-sidebar__user-designation">Frontend Developer</p>
+          <p class="app-sidebar__user-designation"><?=$avataCategory?></p>
         </div>
       </div>
 
@@ -99,6 +100,12 @@
             <li>
               <a class="treeview-item" href="/admin/user"><i class="icon fa fa-circle-o"></i> User </a>
             </li>
+            <!-- <li>
+              <a class="treeview-item" href="/admin/level"><i class="icon fa fa-circle-o"></i> Level </a>
+            </li>
+            <li>
+              <a class="treeview-item" href="/admin/category"><i class="icon fa fa-circle-o"></i> Sys Category </a>
+            </li> -->
           </ul>
         </li>
 

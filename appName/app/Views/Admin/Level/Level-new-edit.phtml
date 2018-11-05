@@ -1,0 +1,134 @@
+<?php
+  $root  = '/admin/level';
+  $view  = $this->getData();
+  $data  = ($view['data'])?? '';
+  $category = ($view['category'])?? '';
+
+  if ($data) {
+    $formTitle  = 'Edit';
+    $msgAction  = $root.'/edit/'.$data->level_id;
+    $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
+
+    $msgId      = ($data->level_id) ?? '';
+    $msgCategory= ($data->level_category) ?? '';
+    $msgName    = ($data->level_name) ?? '';
+    $msgObs     = ($data->level_obs) ?? '';
+
+    $msgCreated = getDateTimePTbr($data->level_created);
+    $msgUpdated = getDateTimePTbr($data->level_updated);
+  }else{
+    $formTitle  = 'Create';
+    $msgAction  = $root.'/create';
+    $btnAction  = '<i class="fa fa-fw fa-lg fa-check-circle"></i>Register';
+
+    $msgCategory= getDataInput('level_category')?? '1';
+    $msgName    = getDataInput('level_name')?? '';
+    $msgObs     = getDataInput('level_obs')?? '';
+
+    $msgCreated = getDataInput('name_created')?? 'Create: --';
+    $msgUpdated = getDataInput('name_updated')?? 'Update: --';
+  }
+
+  $btnBack    = '<i class="fa fa-fw fa-lg fa-times-circle "></i> Voltar';
+?>
+
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-edit"></i> <?=$this->getTitle()?> </h1>
+          <p> <?=APP_SLOGAN?> </p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Configurações</li>
+          <li class="breadcrumb-item"><a href="/admin/settings">Settings</a></li>
+          <li class="breadcrumb-item"><a href="<?=$root?>">Level</a></li>
+          <li class="breadcrumb-item active"><a href="#"><?=$formTitle?></a></li>
+        </ul>
+      </div>
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title"> <?=$formTitle;?> record </h3>
+            <?php
+              showMessageFlash('primary');
+              showMessageFlash('success');
+              showMessageFlash('info');
+              showMessageFlash('danger');
+              showMessageFlash('warning');
+              // pp($data);
+              // pp($category);
+              ?>
+            <form action="<?=$msgAction;?>" class="" method="post" enctype="multipart/form-data">
+              <div class="tile-body">
+
+                <div class="form-group clearfix">
+                <?php
+                $categoryx = [
+                    '0'=> (object) ['level_id' => '1','level_category' => 'CATEGORY 01'],
+                    '1'=> (object) ['level_id' => '2','level_category' => '02'],
+                    '2'=> (object) ['level_id' => '3','level_category' => 'CAT'],
+                ];
+                // pp($category);
+                // pp($msgCategory);
+                foreach ($category as $k => $v) :
+                    if ($msgCategory == $v->level_category) $checked = 'checked';
+                    elseif ($k == 0) $checked = 'checked';
+                    else $checked = '';
+                    echo '<div class="float-left mr-5" >';
+                        echo '<label class="control-label d-block"> '.$v->level_category.' </label> ';
+                        echo '<label class="switch mx-auto" style="min-widthx: 100px;">';
+                            echo '<input class="form-check-input" type="radio" name="level_category" value="'.$v->level_category.'" '.$checked.'>';
+                            echo '<span class="slider"></span>';
+                        echo '</label>';
+                    echo '</div>';
+                endforeach;
+                ?>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Level</label>
+                  <input class="form-control" type="text" name="level_name" value="<?=$msgName;?>" placeholder="Enter level">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Obs</label>
+                  <textarea class="form-control" rows="4" name="level_obs" placeholder="Enter your obs"><?=$msgObs; ?></textarea>
+                </div>
+
+              </div>
+              <div class="tile-footer">
+                <button class="btn btn-primary" type="submit"><?=$btnAction?></button>
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn btn-secondary pull-right" href="<?=$root?>"><?=$btnBack?></a>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+
+
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Notification Plugin Bootstrap 4 Hullabaloo -->
+    <!-- <script src="/assets/libs/Hullabaloo/hullabaloo.min.js"></script> -->
+    <!-- <script src="/assets/libs/notify/notify.min.js"></script> -->
+    <!-- Google analytics script-->
+
+    <script type="text/javascript">
+
+    </script>
+
+  </body>
+</html>

@@ -22,10 +22,8 @@ Router::get('about', 'HomeController@about');
 
 # SETUP
 Router::group(['prefix'=>'setup'], function() {
-
 	Router::get('', 'SetupController@index');
 	Router::post('', 'SetupController@setup');
-
 });
 
 # AUTH
@@ -46,12 +44,11 @@ Router::group(['prefix'=>'auth'], function() {
 
 # ADMIN
 Router::group(['prefix'=>'admin', 'namespace'=>'admin'], function() {
-
 	Router::get('', 'AdminController@index');
-	# Profile
-	Router::get('profile/{:id}', 'UserController@profile');
-	Router::post('profile/{:id}', 'UserController@profile');
 
+	Router::get('settings', 'AdminController@settings');
+	Router::get('profile/{:id}', 'AdminController@profile');
+	Router::post('profile/{:id}', 'AdminController@profile');
 });
 
 # USER
@@ -70,58 +67,47 @@ Router::group(['prefix'=>'admin/user', 'namespace'=>'admin'], function() {
 	Router::get('delete/{:id}', 'UserController@delete');
 	Router::get('destroy/{:id}', 'UserController@destroy');
 
-	# MODALS list/new Level
-	// Router::post('listlevel', 'LevelAuthController@listlevel');
-	// Router::post('newlevel', 'LevelAuthController@newlevel');
-	/*Router::post('listlevel', 'LevelAuthController@listlevel');
-	Router::post('newlevel', 'LevelAuthController@newlevel');*/
-
 });
-
-
-
-
-
-
-
 
 
 # CATEGORY SYSTEMS
 Router::group(['prefix'=>'admin/category', 'namespace'=>'admin'], function() {
 
-	Router::get('', 'CategorySystemController@index');
-	Router::get('jstatus', 'CategorySystemController@jstatus');
+	Router::get('', 'CategorySysController@index');
+	Router::get('jstatus', 'CategorySysController@jstatus');
 
-	Router::get('create', 'CategorySystemController@create');
-	Router::post('create', 'CategorySystemController@create');
+	Router::get('create', 'CategorySysController@create');
+	Router::post('create', 'CategorySysController@create');
 
-	Router::get('edit/{:id}', 'CategorySystemController@edit');
-	Router::post('edit/{:id}', 'CategorySystemController@edit');
+	Router::get('edit/{:id}', 'CategorySysController@edit');
+	Router::post('edit/{:id}', 'CategorySysController@edit');
 
-	Router::get('delete/{:id}', 'CategorySystemController@delete');
-	Router::get('destroy/{:id}', 'CategorySystemController@destroy');
+	Router::get('delete/{:id}', 'CategorySysController@delete');
+	Router::get('destroy/{:id}', 'CategorySysController@destroy');
 
 });
+
 # LEVEL SYSTEMS
 Router::group(['prefix'=>'admin/level', 'namespace'=>'admin'], function() {
 
-	Router::get('', 'LevelAuthController@index');
-	Router::get('jstatus', 'LevelAuthController@jstatus');
+	Router::get('', 'LevelController@index');
+	Router::get('jstatus', 'LevelController@jstatus');
 
-	Router::get('create', 'LevelAuthController@create');
-	Router::post('create', 'LevelAuthController@create');
+	Router::get('create', 'LevelController@create');
+	Router::post('create', 'LevelController@create');
 
-	Router::get('edit/{:id}', 'LevelAuthController@edit');
-	Router::post('edit/{:id}', 'LevelAuthController@edit');
+	Router::get('edit/{:id}', 'LevelController@edit');
+	Router::post('edit/{:id}', 'LevelController@edit');
 
-	Router::get('delete/{:id}', 'LevelAuthController@delete');
-	Router::get('destroy/{:id}', 'LevelAuthController@destroy');
+	Router::get('delete/{:id}', 'LevelController@delete');
+	Router::get('destroy/{:id}', 'LevelController@destroy');
 
 	# MODALS list/new Category
 	Router::post('listcategory', 'CategorySystemController@listcategory');
 	Router::post('newcategory', 'CategorySystemController@newcategory');
 
 });
+
 
 
 
