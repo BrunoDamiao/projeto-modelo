@@ -7,7 +7,7 @@ use FwBD\DI\Container;
 class UserController extends BaseController
 {
     private $model, $image;
-    private $dbConfig;
+    // private $dbConfig;
     private $root       = '/admin/user';
     private $totalPage  = APP_PAGINATOR;
 
@@ -22,9 +22,6 @@ class UserController extends BaseController
         $this->image = Container::getServices('FwBD\BrImage\Image');
         $this->image->setDirModel('user');
         $this->image->setflagMerge(0);
-
-        $getDB = getJsonDBConfig(PATH_DATABASE);
-        $this->dbConfig = ($getDB['drive'] === 'sqlite')? '': $getDB['name'].'.';
     }
 
 
@@ -40,9 +37,12 @@ class UserController extends BaseController
 
         $authSession = (object) Container::getSession('get', ['Auth']);
 
+        $dbName = (self::getJson()['drive'] === 'sqlite')? '':
+        self::getJson()['name'].'.';
+
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$this->dbConfig.'tb_user AS A
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$dbName.'tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )
@@ -128,9 +128,11 @@ class UserController extends BaseController
     {
         $title = 'Manager Users';
 
+        $dbName = (self::getJson()['drive'] === 'sqlite')? '':self::getJson()['name'].'.';
+
         $data = $this->model
             ->setTable('tb_user AS U')
-            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$this->dbConfig.'tb_user AS A
+            ->select('U.user_id, U.level_id, U.user_name, U.user_email, U.user_password, U.user_show, U.user_thumb, U.user_obs, U.user_uri, U.user_created, U.user_updated, U.user_status, U.user_author, (SELECT A.user_name FROM '.$dbName.'tb_user AS A
                 WHERE A.user_id = U.user_author) AS name_author,
                 L.level_id, L.level_category, L.level_name ')
             ->join('tb_level AS L','L.level_id = U.level_id' )

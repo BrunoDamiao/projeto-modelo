@@ -31,6 +31,7 @@ Router::group(['prefix'=>'auth'], function() {
 
 	Router::get('', 'AuthController@index');
 	Router::post('login', 'AuthController@auth');
+	// Router::post('forgot', 'AuthController@forgot');
 	Router::post('forgotin', 'AuthController@forgotIn');
 	Router::get('logout', 'AuthController@logout');
 
@@ -49,6 +50,11 @@ Router::group(['prefix'=>'admin', 'namespace'=>'admin'], function() {
 	Router::get('settings', 'AdminController@settings');
 	Router::get('profile/{:id}', 'AdminController@profile');
 	Router::post('profile/{:id}', 'AdminController@profile');
+
+	// Router::get('search', 'AdminController@search');
+	Router::get('search/{:name}', 'AdminController@search');
+	Router::post('search', 'AdminController@search');
+	// Router::post('search/{:name}', 'AdminController@search');
 });
 
 # USER

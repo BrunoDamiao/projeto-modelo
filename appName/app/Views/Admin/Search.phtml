@@ -1,0 +1,88 @@
+<?php
+  $authSession = (object) FwBD\Session\Session::get('Auth');
+  // pp($authSession);
+  $root     = '/admin';
+  $view     = $this->getData();
+  $search   = ($view['search'])?? '';
+  $data     = $view['data'];
+?>
+
+    <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-laptop"></i> Search </h1>
+          <p> <?=APP_SLOGAN?> </p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Search</li>
+          <li class="breadcrumb-item"><a href="#"> <?=$search?> </a></li>
+        </ul>
+      </div>
+      <?php
+        // setMsgFlash('warning', 'teste menssager');
+        showMessageFlash('primary');
+        showMessageFlash('success');
+        showMessageFlash('info');
+        showMessageFlash('danger');
+        showMessageFlash('warning');
+        // pp($view);
+      ?>
+      <div class="row">
+        <?php
+        if (!$data) {
+          echo '<div class="col-md-12">';
+            echo '<div class="tile">';
+              echo '<div class="tile-body"> No matching records found: <strong>'.$search.'</strong> </div>';
+            echo '</div>';
+          echo '</div>';
+        }else{
+          echo '<div class="col-md-12">';
+            echo '<div class="tile">';
+              echo '<div class="tile-body pull-left"> Records found: <strong>"'.$search.'"</strong> </div>';
+              echo '<div class="tile-body pull-right"> Showing 1 to '.APP_PAGINATOR.' of '.count($data).' entries</div>';
+              echo '<div class="clearfix"></div>';
+            echo '</div>';
+          echo '</div>';
+          foreach ($data as $v) {
+            $ct = ($v->search_category)?? ''; $tt = ($v->search_title)?? ''; $nm = ($v->search_name)?? '';
+            $title = "$ct $tt $nm";
+            $msg   = ($v->search_obs)?? '';
+            $lnk   = "admin/{$v->search_model}/edit/{$v->search_id}";
+            echo '<div class="col-md-4">';
+              echo '<div class="tile">';
+                echo '<h3 class="tile-title">'.$title.'</h3>';
+                echo '<div class="tile-body">'.$msg.'</div>';
+              echo '<div class="tile-footer"><a class="btn btn-primary" href="/'.$lnk.'">Link</a></div>';
+              echo '</div>';
+            echo '</div>';
+          }
+        }
+        ?>
+        <div class="col-md-4" style="display: none">
+          <div class="tile">
+            <h3 class="tile-title">Card Title</h3>
+            <div class="tile-body">Hey there, I am a very simple card. I am good at containing small bits of information. I am quite convenient because I require little markup to use effectively.</div>
+            <div class="tile-footer"><a class="btn btn-primary" href="#">Link</a></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+
+
+    <!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script type="text/javascript" src="/assets/theme/js/plugins/chart.js"></script>
+    <script type="text/javascript" src="/assets/theme/js/initChart.js"></script>
+    <!-- <script type="text/javascript"> -->
+    <!-- Google analytics script -->
+  </body>
+</html>

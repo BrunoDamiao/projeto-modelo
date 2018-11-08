@@ -1,0 +1,29 @@
+<?php
+    $data = $this->getData()['data'];
+?>
+
+    <main class="app-content">
+        <div class="page-error tile text-center">
+            <?php
+                // pp($data);
+            ?>
+            <img src="/assets/midias/404.png" alt="Erro 404 - Página Não Encontrada" width="90%" >
+            <h1><i class="fa fa-exclamation-circle"></i> <?=$data['head']?> </h1>
+            <p><?=$data['msg']?></p>
+            <p><a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a></p>
+        </div>
+    </main>
+
+<!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
+
+  </body>
+</html>

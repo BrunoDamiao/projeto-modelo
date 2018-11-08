@@ -1,11 +1,12 @@
+<?php
+  $authSession = (object) FwBD\Session\Session::get('Auth');
+  // pp($authSession);
+  $root     = '/admin';
+  $view     = $this->getData();
+  // $data     = $view['data'];
+?>
 
     <main class="app-content">
-
-      <?php
-        $authSession = (object) FwBD\Session\Session::get('Auth');
-        pp($authSession);
-      ?>
-
       <div class="app-title">
         <div>
           <h1><i class="fa fa-dashboard"></i> Dashboard </h1>
@@ -16,20 +17,28 @@
           <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
         </ul>
       </div>
+      <?php
+        showMessageFlash('primary');
+        showMessageFlash('success');
+        showMessageFlash('info');
+        showMessageFlash('danger');
+        showMessageFlash('warning');
+        // pp($view);
+      ?>
       <div class="row">
         <div class="col-md-6 col-lg-3">
           <div class="widget-small primary coloured-icon"><i class="icon fa fa-users fa-3x"></i>
             <div class="info">
               <h4>Users</h4>
-              <p><b>5</b></p>
+              <p><b><?=count($view['user'])?></b></p>
             </div>
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
           <div class="widget-small info coloured-icon"><i class="icon fa fa-thumbs-o-up fa-3x"></i>
             <div class="info">
-              <h4>Likes</h4>
-              <p><b>25</b></p>
+              <h4>Systems</h4>
+              <p><b><?=count($view['user'])?></b></p>
             </div>
           </div>
         </div>
@@ -37,7 +46,7 @@
           <div class="widget-small warning coloured-icon"><i class="icon fa fa-files-o fa-3x"></i>
             <div class="info">
               <h4>Uploades</h4>
-              <p><b>10</b></p>
+              <p><b><?=count($view['user'])?></b></p>
             </div>
           </div>
         </div>

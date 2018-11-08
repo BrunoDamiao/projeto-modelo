@@ -1,0 +1,37 @@
+<?php
+    // $view = $this->getData();
+    $data = $this->getData()['data'];
+?>
+
+    <section class="material-half-bg">
+      <div class="cover"></div>
+    </section>
+
+    <?php
+        // pp($data,1);
+        // pp(getJsonDBConfig()['proj_title']);
+    ?>
+    <section class="error-content">
+      <div class="box">
+        <img src="/assets/midias/404.png" alt="Erro 404 - Página Não Encontrada" width="68%">
+        <h1><i class="fa fa-exclamation-circle"></i> <?=$data['head']?> </h1>
+        <p><?=$data['msg']?></p>
+        <p><a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a></p>
+      </div>
+
+      <!-- <div class="error-box text-center">
+      </div> -->
+
+    </section>
+
+
+    <!-- <main class="app-content">
+      <div class="page-error tile text-center">
+        <?php
+            // pp($data);
+        ?>
+        <h1><i class="fa fa-exclamation-circle"></i> <?=$data['head']?> </h1>
+        <p><?=$data['msg']?></p>
+        <p><a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a></p>
+      </div>
+    </main> -->

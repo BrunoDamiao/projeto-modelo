@@ -4,13 +4,14 @@ namespace FwBD\Encrypt;
 class Encrypt implements iEncrypt
 {
 
-    private static $key;
-
-    private static function getAppKey()
+    private static function getJsonKey()
     {
-        self::$key = getJsonDBConfig(PATH_DATABASE)['proj_key'];
-        // return !empty(self::$key)? self::$key : APP_KEY;
-        return self::$key;
+        // self::$key = getJsonDBConfig(PATH_DATABASE)['proj_key'];
+        /*$k = getJsonDBConfig(PATH_DATABASE)['proj_key'] ;
+        self::$key = !empty($prmkey)? $prmkey : $k ;
+        // return self::$key;*/
+
+        return getJsonDBConfig(PATH_DATABASE)['proj_key'];
     }
 
     public static function encrypt($val, $key='')
@@ -19,7 +20,7 @@ class Encrypt implements iEncrypt
         $middle = substr($val, 2, -2);
         $end = substr($val, -2);
 
-        $encrypt = base64_encode($middle.self::getAppKey().$end.$key.$init);
+        $encrypt = base64_encode($middle.$key.$end.$key.$init);
 
         return $encrypt;
     }
@@ -27,7 +28,7 @@ class Encrypt implements iEncrypt
     public static function decrypt($val, $key='')
     {
         $decrypt = base64_decode($val);
-        $decrypt = str_replace(self::getAppKey(), '', $decrypt);
+        // $decrypt = str_replace($key, '', $decrypt);
         $decrypt = str_replace($key, '', $decrypt);
 
         $init = substr($decrypt, -2);
@@ -39,9 +40,11 @@ class Encrypt implements iEncrypt
         return $decrypt;
     }
 
-    public static function hashCode($val)
+    public static function hashCode($val, $key='')
     {
-        $encrypt = self::encrypt($val);
+        $appKey = !empty($key)? $key : getJsonDBConfig(PATH_DATABASE)['proj_key'];
+
+        $encrypt = self::encrypt($val,$appKey);
         $encrypt = md5($encrypt);
         $encrypt = crypt($val, $encrypt);
         $encrypt = hash('sha512', $encrypt);

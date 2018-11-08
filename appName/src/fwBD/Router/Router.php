@@ -346,20 +346,22 @@ class Router
 
 	private static function getPageNotFound(array $page=[])
 	{
+		if ( count(explode('/', self::$uri)) > 2 ) :
+			Container::setFilter(['auth']);
+			$pathPage = 'Admin/404';
+			$pathTemp = 'admin.templates.template';
+		else :
+			$pathPage = 'Auth/404';
+			$pathTemp = 'auth.templates.template';
+		endif;
 
-		if (empty($page)) {
-			$pathPage = 'site/404';
-			$dataPage = [
-				'title' => 'Error 404',
-				'header' => 'Error 404 - Page Not Found',
-			];
-		}else{
-			$pathPage = $page['pathPage'];
-			unset($page['pathPage']);
-			$dataPage = $page;
-		}
-
-		\FwBD\View\View::directView($pathPage, $dataPage);
+		$title = 'Error 404';
+		$data  = [
+			'head' => 'Erro 404 - Página Não Encontrada',
+			'msg'  => 'A página que você solicitou não foi encontrada.',
+		];
+		Container::setTemplateView($pathTemp);
+		Container::getView($pathPage, compact('title','data'));
 	}
 
 

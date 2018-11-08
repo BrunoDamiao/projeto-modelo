@@ -254,13 +254,14 @@ class BaseModel implements iBaseModel
     /**
      * Function Where => Create JOIN Tables
      * Ex: ->join('tb_gb', 'tb_gb.post_id = tb_post.post_id');
+     * Dicas: https://www.devmedia.com.br/sql-join-entenda-como-funciona-o-retorno-dos-dados/31006
      * @param string $tbjoin : Name Table Join ()
      * @param string $whereJoin : Where join ()
-     * @param string $tpJoin : operador join (INNER, LEFT, RIGHT ou OUTER)
+     * @param string $tpJoin : operador join (INNER, LEFT, RIGHT ou FULL OUTER)
      */
-    public function join($tbjoin, $whereJoin, $tpJoin='JOIN')
+    public function join($tbjoin, $whereJoin, $tpJoin='INNER')
     {
-        $this->join .= " {$tpJoin} {$tbjoin} ON {$whereJoin} ";
+        $this->join .= " {$tpJoin} JOIN {$tbjoin} ON {$whereJoin} ";
 
         return $this;
     }

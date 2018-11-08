@@ -231,8 +231,9 @@ function getDateTimePTbr($datetime, $strFormat = 'd-m-Y H:i:s')
 }*/
 
 # Cria e set a constante DB_CONFIG com as config. do banco de dados
-function getJsonDBConfig($dir)
+function getJsonDBConfig($dir='')
 {
+    $dir = !empty($dir)? $dir : PATH_DATABASE;
     foreach (glob($dir."*.json") as $file) {
         if (file_exists($file)) {
             // echo "getJsonDBConfig ";

@@ -11,7 +11,7 @@ use FwBD\Json\Json;
 class AuthController extends BaseController
 {
     private $model;
-    private $pTitle;
+    // private $pTitle;
 
     public function __construct($params)
     {
@@ -19,7 +19,8 @@ class AuthController extends BaseController
         Container::setTemplateView('auth.templates.template');
         $this->model = Container::getServices('App\Models\Auth');
 
-        $this->pTitle = getJsonDBConfig(PATH_DATABASE)['proj_title'];
+        if ( Container::getSession('has', ['Auth']) )
+            redirect('/admin');
     }
 
     public function __destruct()
@@ -34,28 +35,23 @@ class AuthController extends BaseController
 
     public function getIndex()
     {
-
-        $title = $this->pTitle . ' - Auth';
-
-        $data  = $this->pTitle;
-
+        $title = 'Auth';
+        $data  = self::getJson()['proj_title'];
         Container::getView('auth.auth', compact('title','data'));
     }
 
     public function getCreate()
     {
-        $title = $this->pTitle . ' - Create';
+        $title = 'Create';
         Container::getView('auth.create', compact('title'));
-
         // $this->getView('Cadastra-se Agora!', 'Create');
         // Container::getView('auth.Create', ['title' => 'Cadastra-se Agora!']);
     }
 
     public function getForgot()
     {
-        $title = $this->pTitle . ' - Forgot';
+        $title = 'Forgot';
         Container::getView('auth.forgot', compact('title'));
-
         // $this->getView('Esqueceu a Senha?', 'forgot');
         // Container::getView('auth.forgot', ['title' => 'Esqueceu a Senha?']);
     }
@@ -64,7 +60,6 @@ class AuthController extends BaseController
     {
         if ( !Container::getSession('has', ['Auth']) )
             return redirect('/auth');
-
 
         #AUTHSET, set flag=0, deixando o usuario Off-line
         $ssAuth = Container::getSession('get', ['Auth']);
@@ -83,10 +78,8 @@ class AuthController extends BaseController
      */
     public function postAuth()
     {
-
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request')->post();
-        // array_pop($request);
         // pp($request,1);
 
         #VALIDATE
@@ -116,7 +109,6 @@ class AuthController extends BaseController
             ->where('auth.user_status', '1')
             ->all();
         $datas = $this->model->getResult();
-        // pp($datas,1);
 
         #VALIDA 00: USER SESSION - Verifica se sessao auth existe
         if ( Container::getSession('has', ['Auth']) ){
@@ -209,76 +201,11 @@ class AuthController extends BaseController
 
     }
 
-    public function postCreateBoss()
-    {
-
-        # EXEC sql, criando user MASTERKEY nas tbs level, user e level_user
-
-        /*$levelBoss = $this->getSuperLevel();
-        ($levelBoss,1);*/
-
-        #REQUEST
-        $request = Container::getServices('FwBD\Request\Request')->post();
-        array_pop($request);
-
-        #VALIDATE
-        $validate = Container::getServices('FwBD\Validate\Validate','Auth');
-        $this->model->setRules([
-            'user_name' => 'requerid | unique:user | min:3 | max:20',
-            'user_email' => 'requerid | email | unique:user | min:2 | max:15',
-            'user_password' => 'requerid | min:4 | max:8']);
-        $validate->validateData($this->model->getRules(), $request);
-
-        if ($validate->getStatus()) {
-            setDataInput($request);
-            setMsgFlash('warning', $validate->getMessages());
-            return redirect('/auth/create');
-        }
-
-        #DATA FORM
-        $datas = [
-            'user_name'     => $request['user_name'],
-            'user_email'    => $request['user_email'],
-            'user_password' => Encrypt::hashCode($request['user_password']),
-            'user_show'     => $request['user_password'],
-            'user_thumb'    => '',
-            'user_obs'      => '--',
-            'user_uri'      => cleanString($request['user_name']),
-            'user_created'  => date('Y-m-d H:i'),
-            'user_updated'  => date('Y-m-d H:i'),
-            'user_status'   => 1,
-            'user_author'   => 2
-        ];
-
-        pp($datas,1);
-
-        # SAVE REGISTRO DB
-        if ( $this->model->insert($datas) ) {
-
-            $userLog = $this->model
-                        ->select('user_id, user_name, user_auth')
-                        ->where('user_name', $datas['user_name'])
-                        ->all()
-                        ->getResult();
-
-            if ( $this->newSession($userLog) ) {
-                setMsgFlash('success', "Parabéns <strong>{$userLog[0]->user_name}</strong>, você foi cadastrado com sucesso!");
-                redirect('/admin');
-            }
-
-        }else{
-            setMsgFlash('danger', "Não foi possivel realizar o cadastro, tente novamente mais tarde.");
-            redirect('/auth/create');
-        }
-
-    }
-
     public function postForgotIn()
     {
 
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request')->post();
-        // array_pop($request);
         // pp($request,1);
 
         #VALIDATE
@@ -298,7 +225,10 @@ class AuthController extends BaseController
                     ->all()
                     ->getResult()[0];
 
-        if ( $data ) {
+        if ( !$data ) {
+            setMsgFlash('danger', "Não foi encontrado nenhum utilizador com este endereço de email.");
+            redirect('/auth');
+        }else{
             ## Gera uma nova Senha aleatória de 4 a 8 digito.
             $NewPass = $this->gerar_senha(8);
             $NewPassCode = Encrypt::hashCode($NewPass);
@@ -312,46 +242,61 @@ class AuthController extends BaseController
             $this->model->update($data->user_id, $dataPassword);
 
             ## Disparar Email com a NOVA SENHA.
-                $nome = $data->user_name;
+                $nome  = $data->user_name;
                 $email = $data->user_email;
 
-                $assunto = EMAIL_LEMBRETE['assunto'];
-                $altBody = EMAIL_LEMBRETE['altBody'];
+                $assunto = 'Senha Alterada'; # Wp+IAzDx
 
-                $message  = '';
-                $message .= EMAIL_LEMBRETE['msgTitle'];
-                $message .= "<p> Sua NOVA Senha de acesso é: <strong> <a href='";
-                $message .= PATH_HOME.'/auth';
-                $message .= "' target='_blank'>";
-                $message .= "{$NewPass}";
-                $message .= "</a></strong> <br>";
-                $message .= " Válida por 30 segundos! </p> ";
-                $message .= EMAIL_LEMBRETE['msgAtt'];
+                $message  = '
+                    <!DOCTYPE html>
+                    <html lang="pt-br">
+                      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                      <title>'.strtoupper($this->pTitle).'</title>
+                    </head>
+                    <body>';
+                // $message .= 'favicon: '.APP_ROOT.DS.PATH_FAVICON;
+                $message .= '<div style="width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 14px;">
+                        <h1>'.CONFIG_EMAIL['EMPRESA'].'</h1>
+                        <p>Olá '.$nome.',</p>
+                        <p>Sua senha de login foi alterada para <strong><a href="http://localhost:8080/auth" title="acessar sistema" target="_blank">'.$NewPass.'</strong>. Se você acha que isso seja um erro, envie um e-mail para <strong>'.CONFIG_EMAIL['MAIL'].'<strong>, onde você poderá entrar em contato com nossa equipe de suporte.</p> <br>
+                        <p>Atenciosamente,</p>
+                        <p><strong>'.CONFIG_EMAIL['EMPRESA'].'</strong><br>
+                        '.CONFIG_EMAIL['SITE'].'<br>
+                      '.CONFIG_EMAIL['CONTATO'].'</p>
+                    </div>
+                    </body>
+                    </html>
+                ';
+                $altBody = CONFIG_EMAIL['EMPRESA']."\n
+                      Olá ".$nome."\n,
+                      Sua senha de login foi alterada para ".$NewPass.". Se você acha que isso seja um erro, envie um e-mail para '.SP_EMAIL.', onde você poderá entrar em contato com nossa equipe de suporte.\n\n
+                      Atenciosamente,\n
+                      ".CONFIG_EMAIL['EMPRESA']."\n
+                      ".CONFIG_EMAIL['SITE']." \n
+                      ".CONFIG_EMAIL['CONTATO']." \n
+                ";
 
-            // $mail = Email::smtpEmail($nome, $email, $assunto, $altBody, $message);
-            $mail = \FwBD\Mail\Email::smtpEmail($nome, $email, $assunto, $altBody, $message);
+            $mail = Email::smtpEmail($nome, $email, $assunto, $altBody, $message);
 
+            $msgFeed = '<strong> <i class="fa fa-fw fa-lg fa-check-circle"></i>Esqueci a senha!</strong> <br> Você deverá receber em breve um e-mail com a senha redefinida. Por favor, certifique-se de verificar seus spams e lixo se você não encontrar o e-mail. '.$NewPass;
             if ($mail) {
-                setMsgFlash('success', "Sua NOVA SENHA foi enviado para sua caixa de e-mail informado a baixo. $NewPass");
+                setMsgFlash('success', $msgFeed);
                 redirect('/auth');
             }else{
                 setMsgFlash('danger', "Falha no envio do e-mail, tentar novamente mais tarde!");
                 redirect('/auth');
             }
 
-        }else{
-            setMsgFlash('danger', "Este e-mail não está cadastrado no sistema.");
-            redirect('/auth');
         }
 
     }
 
     public function postForgot()
     {
-
         #REQUEST
         $request = Container::getServices('FwBD\Request\Request')->post();
-        array_pop($request);
+        // array_pop($request);
+        pp($request,1);
 
         #VALIDATE
         $validate = Container::getServices('FwBD\Validate\Validate','Auth');
@@ -546,49 +491,5 @@ class AuthController extends BaseController
             }
 
         }
-
-
-
-
-        # Funcção inválido no sistema - só para exemplo
-        private function createSuperUserXXXX()
-        {
-
-            # BOSS
-            $userBoss = $this->model->all();
-            pp($userBoss,1);
-
-            if ( empty($userBoss->getTotal()) ) {
-
-                # Create Level MasterKey
-                $sqlLevel  = 'INSERT INTO tb_level (level_category, level_subcategory, level_obs, level_uri, level_created, level_updated, level_status, level_author) ';
-                $sqlLevel .= "VALUES( 'MASTERKEY', 'MASTERKEY', 'user super MASTERKEY', 'MASTERKEY', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0' )";
-
-                $execLevel = \FwBD\Model\BaseModel::exec($sqlLevel);
-
-                # Create User MasterKey
-                $sqlUser  = 'INSERT INTO tb_user (user_name, user_email, user_password, user_show, user_thumb, user_obs, user_uri, user_created, user_updated, user_status, user_author) ';
-                $sqlUser .= "VALUES( 'masterkey', 'masterkey@masterkey.com', '".Encrypt::hashCode('masterkey')."', 'masterkey', '', 'obs masterkey', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0' )";
-
-                $execUser = \FwBD\Model\BaseModel::exec($sqlUser);
-
-                if ( ($execLevel == true) AND ($execUser == true) ) {
-
-                }
-
-                $level = Container::getServices('App\Models\Admin\Level')
-                ->where('tb_level.level_category', 'MASTERKEY')->all()->getResult()[0];
-                $user = $this->model->where('auth.user_name', 'masterkey')->all()->getResult()[0];
-
-                # Create Level_User MasterKey
-                $sqlLevelUser = "INSERT INTO tb_level_user (level_id, user_id) VALUES('{$level->level_id}','{$user->user_id}')";
-                $execUser = \FwBD\Model\BaseModel::exec($sqlLevelUser);
-            }
-
-        }
-
-
-
-
 
 }

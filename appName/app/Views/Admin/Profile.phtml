@@ -9,7 +9,6 @@
   $data = ($view['data'])?? '';
   $level = ($view['level'])?? '';
 
-  $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
   $msgAction  = $root.'/'.$data->user_id;
 
   $msgCategory= ($data->level_category) ?? '';
@@ -22,7 +21,10 @@
 
   $thumb      = ($data->user_thumb) ?? '';
   $msgThumb   = '/'.showThumb($thumb,'user');
-  $btnBack = '<i class="fa fa-fw fa-lg fa-times-circle "></i> Voltar';
+
+  // $btnAction  = '<i class="fa fa-edit m-right-xs"></i> Edit';
+  $btnAction = '<i class="fa fa-fw fa-lg fa-check-circle"></i> Save ';
+  $btnBack   = '<i class="fa fa-fw fa-lg fa-times-circle "></i> Voltar';
 ?>
     <main class="app-content">
       <div class="row user">
@@ -153,7 +155,7 @@
                   <div class="tile-footer">
                     <button class="btn btn-primary" type="submit"><?=$btnAction?></button>
                     &nbsp;&nbsp;&nbsp;
-                    <a class="btn btn-secondary pull-right" href="/admin"><?=$btnBack?></a>
+                    <a class="btn btn-secondary pull-right" href="javascript:window.history.back();"><?=$btnBack?></a>
                   </div>
                 </form>
               </div>

@@ -25,7 +25,8 @@ class View implements iView
 
     public function getTitle()
     {
-        return isset($this->title)? $this->title : '' ;
+        $t = getJsonDBConfig(PATH_DATABASE)['proj_title'];
+        return isset($this->title)? $this->title .' - '. $t : $t ;
     }
 
     public function setData($data)

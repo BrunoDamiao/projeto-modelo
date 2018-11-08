@@ -4,7 +4,7 @@ namespace App\Controllers;
 use FwBD\Controller\BaseController;
 use FwBD\DI\Container;
 use FwBD\DBConect\DBConect as DBConect;
-use FwBD\Encrypt\Encrypt;
+use FwBD\Encrypt\Encrypt as Encrypt;
 use FwBD\Mail\Email;
 use FwBD\Json\Json;
 
@@ -89,7 +89,13 @@ class SetupController extends BaseController
                 'collation' => 'requerid | min:2 | max:255',
                 'user_name' => 'requerid | min:2 | max:255',
                 'user_email' => 'requerid | email | min:2 | max:255',
-                'user_password' => 'requerid | min:2 | max:255'
+                'user_password' => 'requerid | min:2 | max:255',
+                'proj_category' => 'requirid | min:1 | max:255',
+                'proj_key'      => 'requirid | min:2 | max:255',
+                'proj_title'    => 'requirid | min:2 | max:255',
+                'proj_slogan'   => 'requirid | min:2 | max:255',
+                'proj_midias'   => 'requirid | min:2 | max:255',
+                'proj_paginator'=> 'requirid | min:1 | max:255',
             ];
                 $validate->validateData($rules, $data);
                 if ($validate->getStatus()) {
@@ -197,12 +203,12 @@ class SetupController extends BaseController
 
             if ( $config['drive'] === 'sqlite' ) :
                 $script  = $this->sqlTableSqlite($config['name']);
-                // $script .= $this->sqlInsertSqlite($config);
+                # $script .= $this->sqlInsertSqlite($config);
             endif;
 
             if ( $config['drive'] === 'mysql' ) :
                 $script  = $this->sqlTableMysql($config['name']);
-                // $script .= $this->sqlInsertMysql($config);
+                # $script .= $this->sqlInsertMysql($config);
             endif;
 
             $script .= $this->sqlInsertData($config);
@@ -227,10 +233,12 @@ class SetupController extends BaseController
         {
             $data     = $datas;
             $db       = $data['name'];
+            $appKey   = $data['proj_key'];
             $pfxModel = ($data['drive'] === 'sqlite')? null : "`{$db}`.";
             $data['user_show']     = $datas['user_password'];
-            $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
-            $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
+            $data['user_password'] = Encrypt::hashCode($datas['user_password'],$appKey);
+            $passMaster = Encrypt::hashCode('masterkey',$appKey);
+            // pp($data,1);
 
             # Create Category MASTERKEY:1
             $SCRIPT = "INSERT INTO {$pfxModel}`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";
@@ -257,10 +265,11 @@ class SetupController extends BaseController
         {
             $data   = $datas;
             $db     = $data['name'];
+            $appKey = $data['proj_key'];
             #HASH SENHA
             $data['user_show'] = $datas['user_password'];
-            $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
-            $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
+            $data['user_password'] = Encrypt::hashCode($datas['user_password'],$appKey);
+            $passMaster = Encrypt::hashCode('masterkey',$appKey);
 
             # Create Category MASTERKEY:1
             $SCRIPT = "INSERT INTO `{$db}`.`tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";
@@ -337,11 +346,12 @@ class SetupController extends BaseController
         private function sqlInsertSqlite(array $datas)
         {
             $data   = $datas;
-                $db     = $data['name'];
-                #HASH SENHA
-                $data['user_show'] = $datas['user_password'];
-                $data['user_password'] = \FwBD\Encrypt\Encrypt::hashCode($datas['user_password']);
-                $passMaster = \FwBD\Encrypt\Encrypt::hashCode('masterkey');
+            $db     = $data['name'];
+            $appKey = $data['proj_key'];
+            #HASH SENHA
+            $data['user_show'] = $datas['user_password'];
+            $data['user_password'] = Encrypt::hashCode($datas['user_password'],$appKey);
+            $passMaster = Encrypt::hashCode('masterkey',$appKey);
 
             # Create Category MASTERKEY:1
             $SCRIPT = "INSERT INTO `tb_level` (`level_category`, `level_name`, `level_obs`, `level_uri`, `level_created`, `level_updated`, `level_status`, `level_author`) VALUES ('MASTERKEY', '--', 'MASTERKEY', 'masterkey', '".date('Y-m-d H:i')."', '".date('Y-m-d H:i')."', '1', '0');";

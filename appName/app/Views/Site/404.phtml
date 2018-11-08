@@ -1,19 +1,28 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title> <?=APP_HEADER?> - <?=$data['title']?> </title>
-</head>
-<body>
+<?php
+    $data = $this->getData()['data'];
+?>
 
-    <!-- Title Site -->
-    <h1> <?=APP_HEADER?> </h1>
+    <main class="app-content">
+      <div class="page-error tile text-center">
+        <?php
+            // pp($data);
+        ?>
+        <h1><i class="fa fa-exclamation-circle"></i> <?=$data['head']?> </h1>
+        <p><?=$data['msg']?></p>
+        <p><a class="btn btn-primary" href="javascript:window.history.back();">Go Back</a></p>
+      </div>
+    </main>
 
-    <h3> <?=$data['header']?> </h3>
+<!-- Essential javascripts for application to work-->
+    <script src="/assets/theme/js/jquery-3.2.1.min.js"></script>
+    <script src="/assets/theme/js/popper.min.js"></script>
+    <script src="/assets/theme/js/bootstrap.min.js"></script>
+    <script src="/assets/theme/js/main.js"></script>
+    <!-- The javascript plugin to display page loading on top-->
+    <script src="/assets/theme/js/plugins/pace.min.js"></script>
+    <!-- Page specific javascripts-->
+    <script src="/assets/init.js"></script>
+    <!-- Google analytics script-->
 
-    <?php
-        // pp($data);
-    ?>
-   
-</body>
+  </body>
 </html>

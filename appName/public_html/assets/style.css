@@ -60,3 +60,44 @@ input:checked + .slider:before {
 /* FIM SWICH */
 
 
+
+
+/*Error Content*/
+.error-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: top center;
+      -ms-flex-align: top center;
+          align-items: top center;
+  -webkit-box-pack: top center;
+      -ms-flex-pack: top center;
+          justify-content: top center;
+  min-height: 100vh;
+}
+
+.error-content .box {
+  text-align: center;
+  color: #fff;
+}
+
+.error-content .box h2 {
+  margin-bottom: 50px;
+  color: #000;
+}
+
+.error-content .box h1 {
+  margin: 10px;
+  color: #dc3545;
+  font-size: 42px;
+}
+.error-content .box p {
+  color: #000;
+}
+
+
+
